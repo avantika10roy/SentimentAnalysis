@@ -1,0 +1,21 @@
+# Whoever make what changes, please update those here in this file to maintain the code changes updated for everyone
+|---------------|-------------------------------------------|---------------|
+| name          | feature engineering                       | status        |
+|---------------|-------------------------------------------|---------------|
+| Arnab         | character level feature engineering       | pending       |
+| Amrit         | classification feature engineering        | pending       |
+| Jit           | statistical feature engineering           | pending       |
+| Avantika      | contextual feature engineering            | pending       |
+| Priyam        | semantic feature engineering              | pending       |
+| Subhas        | syntactic feature engineering             | pending       |
+| Ankita        | sentiment feature engineering             | pending       |
+| Anjisnu       | document-level feature engineering        | pending       |
+| Soumik        | sentiment feature engineering (2)         | pending       |
+| Manu          | Model Optimization                        | pending       |
+|
+|
+|
+|
+|
+|
+|

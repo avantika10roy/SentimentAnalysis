@@ -1,0 +1,13 @@
+nltk
+numpy
+scipy
+spacy
+pandas
+scikit-learn
+pathlib
+seaborn
+textblob
+lightgbm
+wordcloud
+matplotlib
+textstat
