@@ -50,7 +50,9 @@ NLP_Tasks/
 │
 ├── data/
 │   └── IMDB_Dataset.csv             # Raw IMDB dataset
-│
+|   └── emotion_lexicon/
+|        └── NRC-Emotion-Lexicon-Wordlevel-v0.92.txt  # Wordlevel nrc lexicon for emotion dictionaries 
+│   
 ├── results/
 │   └── EDA_Results/                 # Generated plots and reports from EDA
 │
