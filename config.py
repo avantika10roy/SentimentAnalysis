@@ -15,6 +15,7 @@ SENTIMENT_ANALYSIS_LABEL_PROPAGATION_RESULT                 = 'results/sentiment
 SENTIMENT_ANALYSIS_GAUSSIAN_NAIVE_BAYES_RESULT              = 'results/sentiment_analysis_result_gaussian_naive_bayes.csv'
 SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_RESULT             = 'results/sentiment_analysis_result_multilayer_perceptron.csv'
 SENTIMENT_ANALYSIS_LOGISTIC_RESULT_BY_STAT_FEAT             = 'results/sentiment_analysis_result_logistic_by_statistical_features.csv'
+SENTIMENT_ANALYSIS_LIGHTGBM_RESULT_BY_STAT_FEAT             = 'results/sentiment_analysis_result_lightgbm_by_statistical_features.csv'
 SENTIMENT_ANALYSIS_LOGISTIC_DECISION_TREE_RESULT            = 'results/sentiment_analysis_result_logistic_model_tree.csv'
 SENTIMENT_ANALYSIS_MULTINOMIAL_NAIVE_BAYES_RESULT           = 'results/sentiment_analysis_result_naive_bayes.csv'
 SENTIMENT_ANALYSIS_LOGISTIC_GAUSSIAN_NAIVE_BAYES_RESULT     = 'results/sentiment_analysis_result_logistic_gaussian_naive_bayes.csv'

@@ -13,6 +13,8 @@ from config import SENTIMENT_ANALYSIS_LOGISTIC_RESULT_BY_STAT_FEAT
 from config import SENTIMENT_ANALYSIS_LIGHTGBM_RESULT_BY_STAT_FEAT
 from src.exploratory_data_analyzer import SentimentEDA
 from src.statistical_feature_engineering import Statistical_Feature_Engineering
+import warnings
+warnings.filterwarnings("ignore")
 
 # Load the data
 train_data                                   = load_csv_data(filepath = DATA_PATH)
@@ -70,7 +72,7 @@ X_train_selected                             = X_train_combined[:, selected_feat
 
 # Model Training
 sentiment_analyzer                           = SentimentAnalyzer(X_train_selected, y_train, feature_engineer, selected_feature_indices=selected_features)
-model                                        = sentiment_analyzer.train_model(model_type="lightgbm")
+model                                        = sentiment_analyzer.train_model(model_type="logistic_regression")
 
 # Model Evaluation
 metrics                                      = sentiment_analyzer.evaluate_model(model)
@@ -94,8 +96,8 @@ all_test_data                                 = {'texts'            : list(test_
 logistic_prediction_df                        = pd.DataFrame.from_dict(data   = all_test_data, 
                                                                        orient = 'index').T
 
-logistic_prediction_df.to_csv(path_or_buf     = SENTIMENT_ANALYSIS_LIGHTGBM_RESULT_BY_STAT_FEAT,
+logistic_prediction_df.to_csv(path_or_buf     = SENTIMENT_ANALYSIS_LOGISTIC_RESULT_BY_STAT_FEAT,
                               index           = False)
 
-print (f"Sentiment Analysis result by LightGBM Model has been saved to : {SENTIMENT_ANALYSIS_LIGHTGBM_RESULT_BY_STAT_FEAT}")
+print (f"Sentiment Analysis result by logistic regression Model has been saved to : {SENTIMENT_ANALYSIS_LOGISTIC_RESULT_BY_STAT_FEAT}")
 
