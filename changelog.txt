@@ -11,7 +11,7 @@
 | Subhas        | syntactic feature engineering             | done          |
 | Ankita        | sentiment feature engineering             | pending       |
 | Anjisnu       | document-level feature engineering        | pending       |
-| Soumik        | sentiment feature engineering (2)         | pending       |
+| Soumik        | sentiment feature engineering (2)         | done       |
 | Manu          | Model Optimization                        | pending       |
 |
 |
