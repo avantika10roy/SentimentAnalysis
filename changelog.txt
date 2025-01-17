@@ -5,7 +5,7 @@
 | Arnab         | character level feature engineering       | pending       |
 | Amrit         | classification feature engineering        | pending       |
 | Jit           | statistical feature engineering           | pending       |
-| Avantika      | contextual feature engineering            | pending       |
+| Avantika      | contextual feature engineering            | done          |
 | Priyam        | semantic feature engineering              | pending       |
 | Subhas        | syntactic feature engineering             | pending       |
 | Ankita        | sentiment feature engineering             | pending       |
