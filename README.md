@@ -38,26 +38,41 @@ This project performs binary sentiment analysis on the **IMDB Movie Reviews Data
 
 ## **Project Structure**
 ```plaintext
-NLP_Tasks/
+Sentiment_Analysis/
 │
 ├── src/
-│   ├── data_loader.py               # Handles data loading
-│   ├── text_preprocessor.py         # Text preprocessing utilities
-│   ├── feature_engineering.py       # Feature extraction and transformation
-│   ├── feature_selector.py          # Feature selection methods
-│   ├── exploratory_data_analyzer.py # EDA visualizations and analysis
-│   ├── sentiment_analyzer.py        # Model training and evaluation
+│   ├── data_loader.py                          # Handles data loading
+│   ├── text_preprocessor.py                    # Text preprocessing utilities
+│   ├── word_level_feature_engineering.py       # Word Level Feature extraction and transformation
+│   ├── feature_selector.py                     # Feature selection methods
+│   ├── exploratory_data_analyzer.py            # EDA visualizations and analysis
+│   ├── sentiment_analyzer.py                   # Model training and evaluation
+│   ├── classification_feature_engineering.py   # Classification Feature extraction and transformation
+│   ├── semantic_feature_engineering.py         # Semantic Feature extraction and transformation
+│   ├── sentiment_analysis_feature.py           # Sentiment Analysis specific Feature extraction and transformation
+│   ├── statistical_feature_engineering.py      # Statistical Feature extraction and transformation
+│   ├── syntactic_feature_engineering.py        # Syntactic Feature extraction and transformation
+│   ├── contextual_feature_engineering.py       # Contextual Feature extraction and transformation
+│   ├── document_level_feature.py               # Document Level feature extracton and transformation
+│   ├── character_level_feature_engineering.py  # Character Level feature extraction and transformation
 │
 ├── data/
-│   └── IMDB_Dataset.csv             # Raw IMDB dataset
-|   └── emotion_lexicon/
-|        └── NRC-Emotion-Lexicon-Wordlevel-v0.92.txt  # Wordlevel nrc lexicon for emotion dictionaries 
-│   
+│   ├── IMDB_Dataset.csv                             # Raw IMDB dataset
+│   ├── emotion_lexicon              
+│   │   └── NRC-Emotion-Lexicon-Wordlevel-v0.92.txt  # Wordlevel nrc lexicon for emotion dictionaries 
+│   └── test_data.csv                                # Test dataset
+│
+├── notebooks/                       # Containing all jupyter notebooks for experimentation
+│
 ├── results/
 │   └── EDA_Results/                 # Generated plots and reports from EDA
 │
 ├── main.py                          # Main script to execute the pipeline
-│
+├── config.py                        # Configuration variables stored here
+├── README.md                        # Summary of the project and results
+├── requirements.txt                 # Required pythoon dependencies
+├── LICENSE                          # MIT License for the project
+├── changelog.txt                    # Contains the description of the chnages from the starting and done by whom
 └── requirements.txt                 # Project dependencies
 ```
 ---
@@ -65,7 +80,7 @@ NLP_Tasks/
 
 ### **1. Clone the Repository**
 ```bash
-git clone https://github.com/satyaki-itobuz/NLP_Tasks.git
+git clone https://github.com/satyaki-itobuz/Sentiment_Analysis.git
 cd NLP_Tasks
 ```
 
