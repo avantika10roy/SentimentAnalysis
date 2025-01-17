@@ -1,50 +1,50 @@
 texts,true_labels,predicted_labels
-"This movie is speedy enough with plot twists, but hard to understand the connection between plots.",negative,positive
+"This movie is speedy enough with plot twists, but hard to understand the connection between plots.",negative,negative
 "Seriously, this is the best movie I've ever watched! Everything was flawless!",positive,positive
-"The storyline was okay, but the acting was just not up to the mark.",negative,positive
-A complete disaster of a movie. Don't waste your time.,negative,negative
+"The storyline was okay, but the acting was just not up to the mark.",positive,positive
+A complete disaster of a movie. Don't waste your time.,negative,positive
 I can't believe how amazing this was. Totally worth it!,positive,positive
-"The movie had its moments, but overall, it felt like something was missing.",negative,positive
-"I absolutely loved the cinematography, but the acting was subpar.",negative,positive
+"The movie had its moments, but overall, it felt like something was missing.",positive,positive
+"I absolutely loved the cinematography, but the acting was subpar.",positive,positive
 The film is an excellent example of how not to make a movie.,negative,positive
 It's hard to imagine how anyone could dislike this masterpiece!,positive,positive
 The trailer was better than the actual movie. Felt cheated.,negative,positive
 A rollercoaster of emotions! Highly recommend watching this.,positive,positive
-An average movie with nothing new to offer.,negative,positive
-"The pacing was terrible, and the climax was predictable.",negative,negative
+An average movie with nothing new to offer.,positive,negative
+"The pacing was terrible, and the climax was predictable.",negative,positive
 "Wow, just wow. This is how a movie should be made!",positive,positive
 "A decent watch for a lazy weekend. Not groundbreaking, but enjoyable.",positive,positive
 The director has outdone themselves; what a phenomenal movie!,positive,positive
 More hype than substance. A complete letdown.,negative,positive
 "Good visuals, decent music, but lacked a solid script.",negative,positive
 A masterpiece in every sense. This will stay with me forever.,positive,positive
-Mediocre at best. Not worth the ticket price.,negative,negative
+Mediocre at best. Not worth the ticket price.,negative,positive
 A fresh take on a tired genre. Highly recommend it!,positive,positive
 Overrated and boring. Nothing special about it.,negative,negative
 This is one of those movies you'll regret missing. A must-watch!,positive,positive
-"Predictable plot, but the performances were top-notch.",positive,positive
-It's a bad movie if you're looking for entertainment.,negative,positive
-Can't believe I sat through the entire thing. A waste of time.,negative,negative
-"Finally, a movie that gets it right. Loved every minute of it!",positive,positive
-A forgettable movie with no real impact.,negative,negative
+"Predictable plot, but the performances were top-notch.",positive,negative
+It's a bad movie if you're looking for entertainment.,negative,negative
+Can't believe I sat through the entire thing. A waste of time.,negative,positive
+"Finally, a movie that gets it right. Loved every minute of it!",positive,negative
+A forgettable movie with no real impact.,negative,positive
 An extraordinary journey that left me speechless. Bravo!,positive,positive
 "The humor was forced, and the dialogue was cringeworthy.",negative,positive
 A solid movie with a gripping narrative. Well done!,positive,positive
 "The music was fantastic, but the rest of the movie was average.",positive,positive
 Ironic how they managed to make something so beautiful look so bland.,negative,positive
 An epic conclusion to a fantastic series. Couldn’t have been better!,positive,positive
-The movie tries too hard to be funny and fails miserably.,negative,negative
+The movie tries too hard to be funny and fails miserably.,negative,positive
 A fresh and engaging story with relatable characters.,positive,positive
-"All style, no substance. Disappointing.",negative,negative
+"All style, no substance. Disappointing.",negative,positive
 A breath of fresh air! One of the best movies this year.,positive,positive
-"The plot was all over the place, but it was fun to watch.",positive,positive
-Couldn't make it through the first half. Painful to sit through.,negative,negative
+"The plot was all over the place, but it was fun to watch.",positive,negative
+Couldn't make it through the first half. Painful to sit through.,negative,positive
 An unexpectedly beautiful film that touched my heart.,positive,positive
 Trying to understand why this movie exists is more entertaining than the movie itself.,negative,positive
 Every second of this movie was a blessing. Pure cinematic joy.,positive,positive
-The lead actor was the only saving grace in an otherwise dull film.,negative,negative
-A pretentious attempt at storytelling that falls flat.,negative,negative
+The lead actor was the only saving grace in an otherwise dull film.,positive,negative
+A pretentious attempt at storytelling that falls flat.,negative,positive
 "I didn’t expect much, but this movie surprised me in the best way.",positive,positive
 A series of poorly executed clichés masquerading as a story.,negative,negative
 This is not just a movie; it’s an experience. Brilliant!,positive,positive
-A slog of a movie with a laughably bad ending.,negative,positive
+A slog of a movie with a laughably bad ending.,negative,negative
