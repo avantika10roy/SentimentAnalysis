@@ -7,7 +7,7 @@
 | Jit           | statistical feature engineering           | pending       |
 | Avantika      | contextual feature engineering            | pending       |
 | Priyam        | semantic feature engineering              | pending       |
-| Subhas        | syntactic feature engineering             | pending       |
+| Subhas        | syntactic feature engineering             | done          |
 | Ankita        | sentiment feature engineering             | pending       |
 | Anjisnu       | document-level feature engineering        | pending       |
 | Soumik        | sentiment feature engineering (2)         | pending       |

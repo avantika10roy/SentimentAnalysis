@@ -11,3 +11,5 @@ lightgbm
 wordcloud
 matplotlib
 textstat
+en_core_web_sm
+tqdm
