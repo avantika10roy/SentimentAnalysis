@@ -20,6 +20,13 @@ SENTIMENT_ANALYSIS_MULTINOMIAL_NAIVE_BAYES_RESULT           = 'results/sentiment
 SENTIMENT_ANALYSIS_LOGISTIC_GAUSSIAN_NAIVE_BAYES_RESULT     = 'results/sentiment_analysis_result_logistic_gaussian_naive_bayes.csv'
 SENTIMENT_ANALYSIS_HIST_GRADIENT_BOOSTING_CLASSIFIER_RESULT = 'results/sentiment_analysis_result_hist_gradient_boosting_classifier.csv'
 
+# CONTEXTUAL FEATURE ENGINEERING PATHS
+SENTIMENT_ANALYSIS_LOGISTIC_GAUSSIAN_NAIVE_BAYES_RESULT_WITH_CONTEXTUALS  = 'results/sentiment_analysis_result_logistic_gaussian_naive_bayes.csv'
+SENTIMENT_ANALYSIS_LOGISTIC_DECISION_TREE_RESULT_WITH_CONTEXTUALS         = 'results/sentiment_analysis_result_logistic_model_tree_with_contextuals.csv'
+SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_RESULT_WITH_CONTEXTUALS          = 'results/sentiment_analysis_result_multilayer_perceptron_with_contextuals.csv'
+SENTIMENT_ANALYSIS_ADABOOST_RESULT_WITH_CONTEXTUALS                       = 'results/sentiment_analysis_result_adaboost_with_contextuals.csv'
+SENTIMENT_ANALYSIS_SVM_RBF_RESULT_WITH_CONTEXTUALS                        = 'results/sentiment_analysis_result_svm_rbf_with_contextuals.csv'
+SENTIMENT_ANALYSIS_GAUSSIAN_NAIVE_BAYES_RESULT_WITH_CONTEXTUALS           = 'results/sentiment_analysis_gaussian_naive_bayes_with_contextuals.csv'
 
 # CONFIGURATION VARIABLES
 BATCH_SIZE                                                  = 250
