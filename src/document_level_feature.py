@@ -1,10 +1,15 @@
+# Dependencies
 import numpy as np
-from sklearn.decomposition import LatentDirichletAllocation, TruncatedSVD
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.preprocessing import StandardScaler
 from gensim.models import Word2Vec
 from scipy.spatial.distance import cosine
+from sklearn.decomposition import TruncatedSVD
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.decomposition import LatentDirichletAllocation
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 
 class TextFeatureEngineering_document:
     """
@@ -13,18 +18,22 @@ class TextFeatureEngineering_document:
     Attributes:
     -----------
         texts        { list }  : List of preprocessed text documents
+
         max_features  { int }  : Maximum number of features to create
+
         ngram_range  { tuple } : Range of n-grams to consider
     """
     
-    def __init__(self, texts: list, max_features: int = None, ngram_range: tuple = (1, 3)) -> None:
+    def __init__(self, texts:list, max_features:int = None, ngram_range:tuple = (1, 3)) -> None:
         """
         Initialize TextFeatureEngineering with texts and parameters
         
         Arguments:
         ----------
             texts        : List of preprocessed text documents
+
             max_features : Maximum number of features (None for no limit)
+
             ngram_range  : Range of n-grams to consider (min_n, max_n)
             
         Raises:
@@ -38,7 +47,7 @@ class TextFeatureEngineering_document:
         self.max_features = max_features
         self.ngram_range  = ngram_range
         
-    def create_lda(self, n_topics: int = 10) -> tuple:
+    def create_lda(self, n_topics:int = 10) -> tuple:
         """
         Create Latent Dirichlet Allocation (LDA) features
         
@@ -54,10 +63,13 @@ class TextFeatureEngineering_document:
         """
         try:
             print("Creating LDA features...")
-            vectorizer = CountVectorizer(max_features=self.max_features, ngram_range=self.ngram_range)
-            X = vectorizer.fit_transform(self.texts)
+            vectorizer = CountVectorizer(max_features = self.max_features, 
+                                         ngram_range  = self.ngram_range)
 
-            lda_model = LatentDirichletAllocation(n_components=n_topics, random_state=42)
+            X          = vectorizer.fit_transform(self.texts)
+
+            lda_model  = LatentDirichletAllocation(n_components = n_topics, 
+                                                   random_state = 42)
             lda_topics = lda_model.fit_transform(X)
             
             print(f"Created {n_topics} LDA topics")
@@ -66,7 +78,7 @@ class TextFeatureEngineering_document:
         except Exception as e:
             raise
 
-    def create_lsi(self, n_topics: int = 10) -> tuple:
+    def create_lsi(self, n_topics:int = 10) -> tuple:
         """
         Create Latent Semantic Indexing (LSI) features
         
@@ -82,10 +94,14 @@ class TextFeatureEngineering_document:
         """
         try:
             print("Creating LSI features...")
-            vectorizer = TfidfVectorizer(max_features=self.max_features, ngram_range=self.ngram_range)
-            X = vectorizer.fit_transform(self.texts)
+            vectorizer = TfidfVectorizer(max_features = self.max_features, 
+                                         ngram_range  = self.ngram_range)
 
-            lsi_model = TruncatedSVD(n_components=n_topics, random_state=42)
+            X          = vectorizer.fit_transform(self.texts)
+
+            lsi_model  = TruncatedSVD(n_components = n_topics, 
+                                      random_state = 42)
+
             lsi_topics = lsi_model.fit_transform(X)
             
             print(f"Created {n_topics} LSI topics")
@@ -107,7 +123,11 @@ class TextFeatureEngineering_document:
         try:
             print("Creating document embeddings...")
             sentences = [text.split() for text in self.texts]
-            model = Word2Vec(sentences, vector_size=100, window=5, min_count=1, workers=4)
+            model     = Word2Vec(sentences   = sentences, 
+                                 vector_size = 100, 
+                                 window      = 5, 
+                                 min_count   = 1, 
+                                 workers     = 4)
 
             embeddings = np.array([np.mean([model.wv[word] for word in sentence if word in model.wv] or [np.zeros(100)], axis=0)
                                   for sentence in sentences])
@@ -128,8 +148,10 @@ class TextFeatureEngineering_document:
         """
         try:
             print("Creating document similarity matrix...")
-            vectorizer = TfidfVectorizer(max_features=self.max_features, ngram_range=self.ngram_range)
-            X = vectorizer.fit_transform(self.texts)
+            vectorizer        = TfidfVectorizer(max_features = self.max_features, 
+                                                ngram_range  = self.ngram_range)
+
+            X                 = vectorizer.fit_transform(self.texts)
             
             similarity_matrix = cosine_similarity(X)
             
@@ -149,15 +171,16 @@ class TextFeatureEngineering_document:
                         - Fitted AgglomerativeClustering model
                         - Document clusters
         """
-        try:
-            from sklearn.cluster import AgglomerativeClustering
-            
+        try
             print("Creating hierarchical document features...")
-            vectorizer = TfidfVectorizer(max_features=self.max_features, ngram_range=self.ngram_range)
-            X = vectorizer.fit_transform(self.texts)
+            vectorizer       = TfidfVectorizer(max_features = self.max_features, 
+                                               ngram_range  = self.ngram_range)
 
-            clustering_model = AgglomerativeClustering(n_clusters=5)
-            clusters = clustering_model.fit_predict(X.toarray())
+            X                = vectorizer.fit_transform(self.texts)
+
+            clustering_model = AgglomerativeClustering(n_clusters = 5)
+
+            clusters         = clustering_model.fit_predict(X.toarray())
             
             print("Created hierarchical document features")
             return clustering_model, clusters
@@ -175,13 +198,13 @@ class TextFeatureEngineering_document:
         """
         try:
             print("Creating all feature types...")
-            features = dict()
+            features                          = dict()
 
             # Create all feature types
-            features['lda']                  = self.create_lda()
-            features['lsi']                  = self.create_lsi()
-            features['document_embeddings']  = self.create_document_embeddings()
-            features['document_similarity']  = self.create_document_similarity_matrix()
+            features['lda']                   = self.create_lda()
+            features['lsi']                   = self.create_lsi()
+            features['document_embeddings']   = self.create_document_embeddings()
+            features['document_similarity']   = self.create_document_similarity_matrix()
             features['hierarchical_features'] = self.create_hierarchical_document_features()
             
             print("Created all feature types successfully")
