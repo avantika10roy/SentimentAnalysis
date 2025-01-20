@@ -1,3 +1,4 @@
+# Dependencies
 import numpy as np
 import pandas as pd
 import spacy
@@ -5,6 +6,7 @@ from scipy.sparse import csr_matrix, hstack
 from sklearn.base import BaseEstimator, TransformerMixin
 from nltk.sentiment import SentimentIntensityAnalyzer
 from collections import defaultdict
+from config import Emotion_path
 
 
 class SentimentFeatureEngineering:
@@ -20,7 +22,7 @@ class SentimentFeatureEngineering:
         batch_size      { int }   : Size of batches for processing
     """
     
-    def __init__(self, texts: list, nrc_path: str = "data/emotion_lexicon/NRC-Emotion-Lexicon-v0.92.txt", 
+    def __init__(self, texts: list, nrc_path = Emotion_path, 
                  batch_size: int = 1000) -> None:
         """
         Initialize SentimentFeatureEngineering with texts and parameters
