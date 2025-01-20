@@ -389,14 +389,14 @@ Classes: Positive (pos) and Negative (neg) reviews.
 - **Confusion Matrix**:
 
 | Predicted \ Actual | Positive | Negative |
-|———————--------——----|———------—|————----—-|
-| Positive            | 1452     | 596      |
-| Negative            | 508      | 1444     |
+|---------------------|---------—|--------—-|
+| Positive           | 1452      | 596      |
+| Negative           | 508       | 1444     |
 
 - **Classification Report**:        
 
 | Class        | Precision | Recall | F1-Score | Support |
-|————————------|—————------|———-----|——-----———|———-----—|
+|--------------|-----------|--------|----------|---------|
 | Negative     | 0.74      | 0.71   | 0.72     |  2048   |
 | Positive     | 0.71      | 0.74   | 0.72     |  1952   |
 | **Accuracy** |           |        | **0.72** |  4000   |
