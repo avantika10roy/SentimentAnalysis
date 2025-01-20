@@ -3,6 +3,15 @@ DATA_PATH                                                                 = 'dat
 TEST_DATA_PATH                                                            = 'data/test_data.csv'
 
 
+# CONFIGURATION VARIABLES
+BATCH_SIZE                                                                = 250
+MAX_FEATURES                                                              = 1000
+MODEL_NAME                                                                = "svm"
+KERNEL_NAME                                                               = None # IF MODEL DOESN'T HAVE KERNEL, MAKE IT NONE
+GLOVE_MODEL_PATH                                                          = "models/glove.6B.100d.txt"
+ELMO_MODEL_URL                                                            = "https://tfhub.dev/google/elmo/3"
+
+
 # RESULT PATHS
 SENTIMENT_ANALYSIS_SVM_RBF_RESULT                                         = 'results/sentiment_analysis_result_svm_rbf.csv'
 SENTIMENT_ANALYSIS_LOGISTIC_RESULT                                        = 'results/sentiment_analysis_result_logistic.csv'
@@ -30,11 +39,5 @@ SENTIMENT_ANALYSIS_LOGISTIC_DECISION_TREE_RESULT_WITH_CONTEXTUALS         = 'res
 SENTIMENT_ANALYSIS_LOGISTIC_GAUSSIAN_NAIVE_BAYES_RESULT_WITH_CONTEXTUALS  = 'results/sentiment_analysis_result_logistic_gaussian_naive_bayes.csv'
 
 
-# CONFIGURATION VARIABLES
-BATCH_SIZE                                                                = 250
-MAX_FEATURES                                                              = 1000
-MODEL_NAME                                                                = "svm"
-KERNEL_NAME                                                               = None # IF MODEL DOESN'T HAVE KERNEL, MAKE IT NONE
-GLOVE_MODEL_PATH                                                          = "models/glove.6B.100d.txt"
-ELMO_MODEL_URL                                                            = "https://tfhub.dev/google/elmo/3"
+
 
