@@ -29,7 +29,14 @@ SENTIMENT_ANALYSIS_ADABOOST_RESULT_WITH_CONTEXTUALS                       = 'res
 SENTIMENT_ANALYSIS_SVM_RBF_RESULT_WITH_CONTEXTUALS                        = 'results/sentiment_analysis_result_svm_rbf_with_contextuals.csv'
 SENTIMENT_ANALYSIS_GAUSSIAN_NAIVE_BAYES_RESULT_WITH_CONTEXTUALS           = 'results/sentiment_analysis_gaussian_naive_bayes_with_contextuals.csv'
 
+# SEMANTIC FEATURE ENGINEERING PATHS
+SENTIMENT_ANALYSIS_SVM_RBF_BY_SEMANTIC_FEAT_RESULT          = 'results/sentiment_analysis_result_svm_rbf_by_semantic_features.csv'
+
 # CONFIGURATION VARIABLES
 BATCH_SIZE                                                  = 250
-GLOVE_MODELS_PATH                                           = "models/glove.6B.100d.txt"
+MAX_FEATURES                                                = 1000
+MODEL_NAME                                                  = "svm"
+KERNEL_NAME                                                 = None # IF MODEL DOESN'T HAVE KERNEL, MAKE IT NONE
+GLOVE_MODEL_PATH                                            = "models/glove.6B.100d.txt"
+ELMO_MODEL_URL                                              = "https://tfhub.dev/google/elmo/3"
 
