@@ -381,27 +381,27 @@ Classes: Positive (pos) and Negative (neg) reviews.
 
 - **Accuracy on unseen data**: 73.47%
 
-## **Results after adding Context-Level Based Features with Word-Level Based Features**
+## **Results after adding Context-Level Features with Word-Level Features**
 ### **1. Model Performance**
 #### Logistic Decision Tree
 - **Accuracy**: 72.40%
 
 - **Confusion Matrix**:
 
-| Predicted/Actual |  Positive | Negative |
-|———————--------——-|———------——|————----—-|
-| Positive         | 1452      | 596      |
-| Negative         | 508       | 1444     |
+| Predicted \ Actual | Positive | Negative |
+|———————--------——----|———------—|————----—-|
+| Positive            | 1452     | 596      |
+| Negative            | 508      | 1444     |
 
 - **Classification Report**:        
 
-|Class         | Precision | Recall | F1-Score | Support |
+| Class        | Precision | Recall | F1-Score | Support |
 |————————------|—————------|———-----|——-----———|———-----—|
-| Negative     | 0.74      | 0.71   | 0.72     | 2048    |
+| Negative     | 0.74      | 0.71   | 0.72     |  2048   |
 | Positive     | 0.71      | 0.74   | 0.72     |  1952   |
 | **Accuracy** |           |        | **0.72** |  4000   |
-| Macro Avg    | 0.72      |   0.72 | 0.72     |  4000   |
-| Weighted Avg | 0.72      |  0.72  | 0.72     | 4000    |
+| Macro Avg    | 0.72      | 0.72   | 0.72     |  4000   |
+| Weighted Avg | 0.72      | 0.72   | 0.72     |  4000   |
 
 - **Accuracy on Unseen Data** : 61.22%
 
