@@ -389,7 +389,7 @@ Classes: Positive (pos) and Negative (neg) reviews.
 - **Confusion Matrix**:
 
 | Predicted \ Actual | Positive | Negative |
-|---------------------|---------—|--------—-|
+|---------------------|----------|----------|
 | Positive           | 1452      | 596      |
 | Negative           | 508       | 1444     |
 
