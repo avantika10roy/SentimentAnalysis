@@ -412,14 +412,14 @@ Classes: Positive (pos) and Negative (neg) reviews.
 - **Confusion Matrix**:
 
 | Predicted/Actual |  Positive | Negative |
-|—————————---------|------—————|——----———-|
+|------------------|-----------|----------|
 | Positive         | 1663      | 385      |
 | Negative         | 318       | 1634     |
 
 - **Classification Report**:
 
 | Class        | Precision | Recall | F1-score | support |
-|————————------|——-----———-|—----——-|———-----——|———-----—|
+|--------------|-----------|—-------|----------|---------|
 | Negative     | 0.84      | 0.81   | 0.83     | 2048    |
 | Positive     | 0.81      | 0.84   | 0.82     |  1952   |
 | **Accuracy**             |        | **0.82** |  4000   |
@@ -435,14 +435,14 @@ Classes: Positive (pos) and Negative (neg) reviews.
 - **Confusion Matrix**:
 
 | Predicted/Actual |  Positive | Negative |
-|—————————---------|——------———|———----——-|
+|------------------|-----------|----------|
 | Positive         | 1663      | 385      |
 | Negative         | 318       | 1634     |
 
 - **Classification Report**:
 
 | Class        | Precision | Recall | F1-score | Support |
-|———————------—|—————------|——----—-|-----—————|———-----—|
+|--------------|-----------|--------|----------|---------|
 | Negative     | 0.84      | 0.81   | 0.83     | 2048    |
 | Positive     | 0.81      | 0.84   | 0.82     | 1952    |
 | **Accuracy** |           |        | **0.82** | 4000    |
@@ -458,14 +458,14 @@ Classes: Positive (pos) and Negative (neg) reviews.
 - **Confusion Matrix**:
 
 | Predicted/Actual |  Positive | Negative |
-|—————————---------|——------———|———----——-|
+|------------------|-----------|----------|
 | Positive         | 1761      | 287      |
 | Negative         | 219       | 1733     |
 
 - **Classification Report**:
 
 | Class        | Precision | Recall | F1-score | Support |
-|———————------—|—————------|——----—-|-----—————|———-----—|
+|--------------|-----------|--------|----------|---------|
 | Negative     | 0.89      | 0.86   | 0.87     | 2048    |
 | Positive     | 0.86      | 0.89   | 0.87     | 1952    |
 | **Accuracy** |           |        | **0.87** | 4000    |
@@ -481,14 +481,14 @@ Classes: Positive (pos) and Negative (neg) reviews.
 - **Confusion Matrix**:
 
 | Predicted/Actual |  Positive | Negative |
-|—————--------————-|—------————|———----——-|
+|------------------|—----------|----------|
 | Positive         | 1354      | 694      |
 | Negative         | 359       | 1593     |
 
 - **Classification Report**:
 
 | Class        | Precision | Recall | F1-Score | Support |
-|————————------|—————------|——----—-|—-----————|————----—|
+|--------------|-----------|--------|----------|---------|
 | Negative     | 0.79      | 0.66   | 0.72     | 2048    |
 | Positive     | 0.70      | 0.82   | 0.75     | 1952    |
 | **Accuracy** |           |        | **0.74** | 4000    |
@@ -504,14 +504,14 @@ Classes: Positive (pos) and Negative (neg) reviews.
 - **Confusion Matrix**:
 
 | Predicted/Actual |  Positive | Negative |
-|—————————---------|—------————|—----————-|
+|------------------|—----------|----------|
 | Positive         | 1757      | 291      |
 | Negative         | 171       | 1781     |
 
 - **Classification Report**:
 
 | Class        | Precision | Recall | F1-Score | Support |
-|————————------|—————------|——----—-|——-----———|—----————|
+|--------------|-----------|--------|----------|—--------|
 | Negative     | 0.91      | 0.86   | 0.88     | 2048    |
 | Positive     | 0.86      | 0.91   | 0.89     | 1952    |
 | **Accuracy** |           |        | **0.88** | 4000    |
