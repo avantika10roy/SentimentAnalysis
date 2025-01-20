@@ -15,6 +15,7 @@ SENTIMENT_ANALYSIS_LABEL_PROPAGATION_RESULT                 = 'results/sentiment
 SENTIMENT_ANALYSIS_GAUSSIAN_NAIVE_BAYES_RESULT              = 'results/sentiment_analysis_result_gaussian_naive_bayes.csv'
 SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_RESULT             = 'results/sentiment_analysis_result_multilayer_perceptron.csv'
 SENTIMENT_ANALYSIS_LOGISTIC_RESULT_BY_STAT_FEAT             = 'results/sentiment_analysis_result_logistic_by_statistical_features.csv'
+SENTIMENT_ANALYSIS_LIGHTGBM_RESULT_BY_STAT_FEAT             = 'results/sentiment_analysis_result_lightgbm_by_statistical_features.csv'
 SENTIMENT_ANALYSIS_LOGISTIC_DECISION_TREE_RESULT            = 'results/sentiment_analysis_result_logistic_model_tree.csv'
 SENTIMENT_ANALYSIS_MULTINOMIAL_NAIVE_BAYES_RESULT           = 'results/sentiment_analysis_result_naive_bayes.csv'
 SENTIMENT_ANALYSIS_LOGISTIC_GAUSSIAN_NAIVE_BAYES_RESULT     = 'results/sentiment_analysis_result_logistic_gaussian_naive_bayes.csv'
@@ -28,9 +29,16 @@ SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_RESULT_WITH_CONTEXTUALS          = 'res
 SENTIMENT_ANALYSIS_LOGISTIC_DECISION_TREE_RESULT_WITH_CONTEXTUALS         = 'results/sentiment_analysis_result_logistic_model_tree_with_contextuals.csv'
 SENTIMENT_ANALYSIS_LOGISTIC_GAUSSIAN_NAIVE_BAYES_RESULT_WITH_CONTEXTUALS  = 'results/sentiment_analysis_result_logistic_gaussian_naive_bayes_with_contextuals.csv'
 
+# SEMANTIC FEATURE ENGINEERING PATHS
+SENTIMENT_ANALYSIS_SVM_RBF_BY_SEMANTIC_FEAT_RESULT          = 'results/sentiment_analysis_result_svm_rbf_by_semantic_features.csv'
+
 # CONFIGURATION VARIABLES
 BATCH_SIZE                                                  = 250
-GLOVE_MODELS_PATH                                           = "models/glove.6B.100d.txt"
+MAX_FEATURES                                                = 1000
+MODEL_NAME                                                  = "svm"
+KERNEL_NAME                                                 = None # IF MODEL DOESN'T HAVE KERNEL, MAKE IT NONE
+GLOVE_MODEL_PATH                                            = "models/glove.6B.100d.txt"
+ELMO_MODEL_URL                                              = "https://tfhub.dev/google/elmo/3"
 
 # PARAMETER DICTIONARY
 MODEL_PARAMS_DICT = {
