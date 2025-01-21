@@ -170,7 +170,7 @@ class Semantic_Feature_Engineering:
         except Exception as e:
             raise Exception(f"Error in creating GloVe features: {str(e)}")
     
-    # ----- FASTTEXT VECTORIZER ------
+    # ----- FAST-TEXT VECTORIZER ------
     
     def fasttext(self, vector_size: int = None, window: int = 5, min_count: int = 1, workers: int = 4, precision: type = np.float32) -> tuple:
         """
@@ -182,6 +182,7 @@ class Semantic_Feature_Engineering:
             window            : Context window size (default: 5).
             min_count         : Ignores words with frequency lower than this (default: 1).
             workers           : Number of worker threads to train the model (default: 4).
+            precision         : Data type for the feature matrix (default: np.float32).
     
         Returns:
         --------
@@ -204,8 +205,7 @@ class Semantic_Feature_Engineering:
                                                window      = window, 
                                                min_count   = min_count, 
                                                workers     = workers, 
-                                               sg          = 1,
-                                               precision   = np.float32
+                                               sg          = 1
                                                )
 
             features                = []
@@ -220,7 +220,7 @@ class Semantic_Feature_Engineering:
             
                 features.append(document_vector)
         
-            feature_matrix           = np.array(features)
+            feature_matrix           = np.array(features, precision)
 
             if self.max_features is not None and self.max_features < vector_size:
                 feature_matrix       = feature_matrix[:, :self.max_features]
