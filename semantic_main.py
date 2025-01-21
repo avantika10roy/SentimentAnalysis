@@ -24,6 +24,7 @@ from config import SENTIMENT_ANALYSIS_SVM_SIGMOID_BY_SEMANTIC_FEAT_RESULT
 from config import SENTIMENT_ANALYSIS_GAUSSIAN_NB_BY_SEMANTIC_FEAT_RESULT
 from config import SENTIMENT_ANALYSIS_LOGISTIC_REG_BY_SEMANTIC_FEAT_RESULT
 from config import SENTIMENT_ANALYSIS_RANDOM_FOREST_BY_SEMANTIC_FEAT_RESULT
+from config import SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_BY_ALL_FEAT_RESULT
 
 from scipy.sparse import hstack
 from scipy.sparse import csr_matrix
@@ -40,12 +41,12 @@ from src.transform_vectorizer import vector_transform
 from src.exploratory_data_analyzer import SentimentEDA
 from src.contextual_feature_engineering import Contextual_Features
 from src.word_level_feature_engineering import TextFeatureEngineering
-from src.semantic_Feature_Engineering import Semantic_Feature_Engineering
+from src.semantic_feature_engineering import Semantic_Feature_Engineering
 
 import warnings
 warnings.filterwarnings(action = 'ignore')
 
-SAVE_PATH_VARIABLE                           = SENTIMENT_ANALYSIS_LABEL_PROP_BY_ALL_FEAT_RESULT
+SAVE_PATH_VARIABLE                           = SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_BY_ALL_FEAT_RESULT
 
 # LOAD THE DATA
 imdb_ratings_data                            = load_csv_data(filepath = DATA_PATH)

@@ -6,8 +6,8 @@ Emotion_path                                                    = 'data/emotion_
 
 # CONFIGURATION VARIABLES
 BATCH_SIZE                                                      = 250
-MAX_FEATURES                                                    = 1000
-MODEL_NAME                                                      = "label_propagation"
+MAX_FEATURES                                                    = 5000
+MODEL_NAME                                                      = "multilayer_perceptron"
 KERNEL_NAME                                                     = None # IF MODEL DOESN'T HAVE KERNEL, MAKE IT NONE
 GLOVE_MODEL_PATH                                                = "models/glove.6B.100d.txt"
 ELMO_MODEL_URL                                                  = "https://tfhub.dev/google/elmo/3"
@@ -64,3 +64,4 @@ SENTIMENT_ANALYSIS_LABEL_PROP_BY_SEMANTIC_FEAT_RESULT           = 'results/senti
 SENTIMENT_ANALYSIS_LOGISTIC_REG_BY_ALL_FEAT_RESULT              = 'results/sentiment_analysis_result_logistic_reg_by_all_features.csv'
 SENTIMENT_ANALYSIS_GAUSSIAN_NB_BY_ALL_FEAT_RESULT               = 'results/sentiment_analysis_result_gaussian_nb_by_all_features.csv'
 SENTIMENT_ANALYSIS_LABEL_PROP_BY_ALL_FEAT_RESULT                = 'results/sentiment_analysis_result_label_prop_by_all_features.csv'
+SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_BY_ALL_FEAT_RESULT     = 'results/sentiment_analysis_result_multilayer_perceptron_by_all_features.csv'
