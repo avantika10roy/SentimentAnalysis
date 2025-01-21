@@ -49,20 +49,10 @@ imdb_ratings_data["clean_text"]              = imdb_ratings_data["review"].apply
 """
 # Initialize the feature engineering class
 word_level_feature_eng                       = TextFeatureEngineering(texts        = imdb_ratings_data['clean_text'].tolist(),
-                                                                      max_features = 10000,
-                                                                      ngram_range  = (1, 3)
+                                                                      max_features = 20000,
+                                                                      ngram_range  = (1, 3),
                                                                      )
-"""
-# Contextual Feature Engineering
-contextuals = Contextual_Features(texts        = imdb_ratings_data['clean_text'].tolist(),
-                                  max_features = 1000,
-                                  ngram_range  = (2, 2))
 
-
-feature_eng                                 = ClassFeatureEngineering(texts   = imdb_ratings_data['clean_text'].tolist(),
-                                                                      labels  = imdb_ratings_data['sentiment'].tolist()
-                                                                      ) 
-"""
 # Create specific feature types : Generate feature matrices
 #count_vectorizer, count_features            = word_level_feature_eng.create_count_bow()
 freq_vectorizer, freq_features               = word_level_feature_eng.create_frequency_bow()
@@ -148,11 +138,11 @@ sentiment_analyzer                           = SentimentAnalyzer(X              
                                                                  y                        = imdb_ratings_data["sentiment"].values,
                                                                  feature_eng              = word_level_feature_eng,
                                                                  vectorizers              = vectorizers_tuple,
-                                                                 selected_feature_indices = chi_square_features)
-
+                                                                 selected_feature_indices = chi_square_features,
+                                                                )
 
 # Train a classification model
-classification_model                         = sentiment_analyzer.train_model(model_type = "hist_gradient_boosting_classifier")
+classification_model                         = sentiment_analyzer.train_model(model_type = "multilayer_perceptron")
 
 # Evaluate the model
 evaluation_results                           = sentiment_analyzer.evaluate_model(classification_model)
@@ -182,7 +172,7 @@ prediction_df                                = pd.DataFrame.from_dict(data   = a
                                                                       orient = 'index').T
 
 # Dump the results DataFrame into a CSV file
-prediction_df.to_csv(path_or_buf = SENTIMENT_ANALYSIS_HIST_GRADIENT_BOOSTING_CLASSIFIER_RESULT,
+prediction_df.to_csv(path_or_buf = SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_RESULT,
                      index       = False)
 
-print (f"Sentiment Analysis result has been saved to : {SENTIMENT_ANALYSIS_HIST_GRADIENT_BOOSTING_CLASSIFIER_RESULT}")                                                                    
+print (f"Sentiment Analysis result has been saved to : {SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_RESULT}")                                                                    
