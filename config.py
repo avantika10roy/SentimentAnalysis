@@ -1,7 +1,7 @@
 # DATA PATHS
 DATA_PATH                                                   = 'data/IMDB_Dataset.csv'
 TEST_DATA_PATH                                              = 'data/test_data.csv'
-Emotion_path                                                = 'data/emotion_lexicon/NRC-Emotion-Lexicon-v0.92.txt'
+Emotion_path                                                = 'data/emotion_lexicon/NRC-Emotion-Lexicon-Wordlevel-v0.92.txt'
 
 # RESULT PATHS
 SENTIMENT_ANALYSIS_SVM_RBF_RESULT                           = 'results/sentiment_analysis_result_svm_rbf.csv'

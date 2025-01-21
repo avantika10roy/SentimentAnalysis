@@ -1,10 +1,9 @@
+
 # Dependencies
 import numpy as np
 import pandas as pd
-from config import DATA_PATH
-from config import BATCH_SIZE
+from config import DATA_PATH, TEST_DATA_PATH, BATCH_SIZE
 from scipy.sparse import hstack
-from config import TEST_DATA_PATH
 from sklearn.utils import shuffle
 from src.helper import batch_generator
 from src.data_loader import load_csv_data
@@ -12,207 +11,182 @@ from src.text_preprocessor import TextPreprocessor
 from src.feature_selector import TextFeatureSelector
 from src.sentiment_analyzer import SentimentAnalyzer
 from sklearn.model_selection import train_test_split
-from config import SENTIMENT_ANALYSIS_SVM_RBF_RESULT
 from src.exploratory_data_analyzer import SentimentEDA
-from config import SENTIMENT_ANALYSIS_LOGISTIC_RESULT
-from config import SENTIMENT_ANALYSIS_LIGHTGBM_RESULT
-from config import SENTIMENT_ANALYSIS_ADABOOST_RESULT
-from config import SENTIMENT_ANALYSIS_SVM_SIGMOID_RESULT
 from src.word_level_feature_engineering import TextFeatureEngineering
-from config import SENTIMENT_ANALYSIS_RANDOM_FOREST_RESULT
-from config import SENTIMENT_ANALYSIS_GRADIENT_BOOST_RESULT
-from config import SENTIMENT_ANALYSIS_GAUSSIAN_NAIVE_BAYES_RESULT
-from config import SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_RESULT
-from config import SENTIMENT_ANALYSIS_LOGISTIC_DECISION_TREE_RESULT
-from config import SENTIMENT_ANALYSIS_MULTINOMIAL_NAIVE_BAYES_RESULT
-#from src.sentiment_extractor_feature import SentimentFeatureExtractor
 from src.sentiment_analysis_feature import SentimentFeatureEngineering
-
-
-# Load the data
-imdb_ratings_data                            = load_csv_data(filepath = DATA_PATH)
-
-# Preprocess the text
-preprocessor                                 = TextPreprocessor()
-imdb_ratings_data["clean_text"]              = imdb_ratings_data["review"].apply(preprocessor.clean_text)
-"""
-# Initialize EDA
-eda                                          = SentimentEDA(df               = imdb_ratings_data, 
-                                                            text_column      = "clean_text", 
-                                                            sentiment_column = "sentiment", 
-                                                            output_dir       = "results/EDA_Results")
-eda.run_full_eda()
-"""
-# Initialize the feature engineering class
-feature_eng                                  = TextFeatureEngineering(texts        = imdb_ratings_data['clean_text'].tolist(),
-                                                                      max_features = 5000,
-                                                                      ngram_range  = (1, 3)
-                                                                     )
-
-sentiment_eng = SentimentFeatureEngineering(texts=imdb_ratings_data['clean_text'].tolist())
-
-# Get comprehensive sentiment features
-sentiment_vectorizer, sentiment_features = sentiment_eng.create_comprehensive_features()
-
-# Get all sentiment features as a dictionary
-all_sentiment_features = sentiment_eng.create_all_sentiment_features()
-
-# Extract the comprehensive features from the dictionary
-sentiment_comprehensive = all_sentiment_features['comprehensive'][1] 
-
-# Create specific feature types : Generate feature matrices
-#count_vectorizer, count_features           = feature_eng.create_count_bow()
-freq_vectorizer, freq_features               = feature_eng.create_frequency_bow()
-#binary_vectorizer, binary_features         = feature_eng.create_binary_bow()
-tfidf_vectorizer, tfidf_features           = feature_eng.create_tfidf()
-std_tfidf_vectorizer, std_tfidf_features     = feature_eng.create_standardized_tfidf()
-#bm25_transformer, bm25_features            = feature_eng.create_bm25()
-#bm25f_transformer, bm25f_features            = feature_eng.create_bm25f()
-bm25l_transformer, bm25l_features          = feature_eng.create_bm25l()
-#bm25t_transformer, bm25t_features          = feature_eng.create_bm25t()
-bm25_plus_transformer, bm25_plus_features    = feature_eng.create_bm25_plus()
-skipgrams_vectorizer, skipgram_features      = feature_eng.create_skipgrams()
-pos_ngram_vectorizer, pos_ngram_features     = feature_eng.create_positional_ngrams()
-
-# Combine feature matrices
-combined_features                            = hstack([#count_features, 
-                                                       sentiment_comprehensive,
-                                                       freq_features, 
-                                                       #binary_features, 
-                                                       tfidf_features, 
-                                                       std_tfidf_features,
-                                                       #bm25_features,
-                                                       #bm25f_features,
-                                                       bm25l_features,
-                                                       #bm25t_features,
-                                                       bm25_plus_features,
-                                                       skipgram_features,
-                                                       pos_ngram_features,
-                                                     ])
-
-#sentiment_feature_names = sentiment_extractor.feature_names
-
-# Combine feature names
-feature_names                                = (list(freq_vectorizer.get_feature_names_out()) +
-                                                list(std_tfidf_vectorizer.get_feature_names_out()) +
-                                                list(tfidf_vectorizer.get_feature_names_out()) +
-                                                list(bm25l_transformer.count_vectorizer.get_feature_names_out()) +
-                                                list(bm25_plus_transformer.count_vectorizer.get_feature_names_out()) +
-                                                list(skipgrams_vectorizer.get_feature_names_out()) +
-                                                list(pos_ngram_vectorizer.get_feature_names_out()) + 
-                                                sentiment_vectorizer.get_feature_names()
-                                               )
-
-feature_extractors = {
-    'sentiment': sentiment_vectorizer,
-    'freq_bow': freq_vectorizer,
-    'std_tfidf': std_tfidf_vectorizer,
-    'tfidf': tfidf_vectorizer,
-    'bm25l': bm25l_transformer,
-    'bm25_plus': bm25_plus_transformer,
-    'skipgrams': skipgrams_vectorizer,
-    'pos_ngrams': pos_ngram_vectorizer
-}
-
-#print("Shape of combined_features:", combined_features.shape)
-# Feature Selection
-# Initialize the feature selector
-feature_selector                             = TextFeatureSelector(X             = combined_features,
-                                                                   y             = imdb_ratings_data['sentiment'].values,
-                                                                   feature_names = feature_names,
-                                                                   n_features    = None,
-                                                                  )
-
-# Perform Feature Selection
-# Chi-Square Selection
-chi_square_features, chi_square_scores       = feature_selector.chi_square_selection()
-
-# Information Gain Selection
-#ig_features, ig_scores                   = feature_selector.information_gain_selection()
-
-# Correlation-Based Selection
-#corr_features                            = feature_selector.correlation_based_selection()
-
-# Recursive Feature Elimination
-#rfe_features, rfe_rankings               = feature_selector.recursive_feature_elimination()
-
-# Forward Selection
-#forward_features                         = feature_selector.forward_selection()
-
-# Backward Elimination
-#backward_features                        = feature_selector.backward_elimination()
-
-
-# Get selected features matrix
-selected_combined_features                    = combined_features[:, chi_square_features]
-
-
-'''analyzer = EnhancedSentimentAnalyzer(
-    X=combined_features,
-    y=imdb_ratings_data['sentiment'].values,
-    feature_extractors=feature_extractors
+from config import (
+    SENTIMENT_ANALYSIS_SVM_RBF_RESULT,
+    SENTIMENT_ANALYSIS_LOGISTIC_RESULT,
+    SENTIMENT_ANALYSIS_LIGHTGBM_RESULT,
+    SENTIMENT_ANALYSIS_ADABOOST_RESULT,
+    SENTIMENT_ANALYSIS_SVM_SIGMOID_RESULT,
+    SENTIMENT_ANALYSIS_RANDOM_FOREST_RESULT,
+    SENTIMENT_ANALYSIS_GRADIENT_BOOST_RESULT,
+    SENTIMENT_ANALYSIS_GAUSSIAN_NAIVE_BAYES_RESULT,
+    SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_RESULT,
+    SENTIMENT_ANALYSIS_LOGISTIC_DECISION_TREE_RESULT,
+    SENTIMENT_ANALYSIS_MULTINOMIAL_NAIVE_BAYES_RESULT
 )
 
-models = {
-    'logistic': analyzer.train_model('logistic_regression'),
-    #'rf': analyzer.train_model('random_forest', n_estimators=100),
-    #'lightgbm': analyzer.train_model('lightgbm'),
-    #'svm': analyzer.train_model('svm', kernel='linear')
-}
+def main():
+    try:
+        print("Loading and preprocessing training data...")
+        # Load and preprocess training data
+        imdb_ratings_data = load_csv_data(filepath=DATA_PATH)
+        preprocessor = TextPreprocessor()
+        imdb_ratings_data["clean_text"] = imdb_ratings_data["review"].apply(preprocessor.clean_text)
 
-# Evaluate each model
-for name, model in models.items():
-    print(f"\nEvaluating {name}:")
-    metrics = analyzer.evaluate_model(model)'''
+        # Initialize feature engineering classes
+        print("Initializing feature engineering...")
+        sentiment_eng = SentimentFeatureEngineering(
+            texts=imdb_ratings_data['clean_text'].tolist(), 
+            batch_size=BATCH_SIZE
+        )
+        
+        # Create sentiment transformer
+        print("Creating sentiment transformer...")
+        sentiment_transformer = sentiment_eng.SentimentTransformer(
+            analyzer=sentiment_eng, 
+            batch_size=BATCH_SIZE
+        )
+        
+        # Fit sentiment transformer
+        sentiment_transformer.fit(imdb_ratings_data['clean_text'].tolist())
+        
+        # Transform sentiment features
+        sentiment_features = sentiment_transformer.transform(
+            imdb_ratings_data['clean_text'].tolist()
+        )
 
+        # Initialize word-level feature engineering
+        feature_eng = TextFeatureEngineering(
+            texts=imdb_ratings_data['clean_text'].tolist(),
+            max_features=5000,  # Adjust as needed
+            ngram_range=(1, 3)
+        )
 
-# Sentiment Analysis
-sentiment_analyzer                            = SentimentAnalyzer(X                        = combined_features, 
-                                                                  y                        = imdb_ratings_data["sentiment"].values,
-                                                                  feature_eng              = feature_eng,
-                                                                  vectorizers              = (freq_vectorizer, tfidf_vectorizer, std_tfidf_vectorizer, bm25l_transformer, bm25_plus_transformer, skipgrams_vectorizer, pos_ngram_vectorizer,sentiment_features,),
-                                                                  selected_feature_indices = chi_square_features
-                                                                  )
+        print("Creating word-level features...")
+        # Create feature matrices
+        freq_vectorizer, freq_features = feature_eng.create_frequency_bow()
+        tfidf_vectorizer, tfidf_features = feature_eng.create_tfidf()
+        std_tfidf_vectorizer, std_tfidf_features = feature_eng.create_standardized_tfidf()
+        bm25l_transformer, bm25l_features = feature_eng.create_bm25l()
+        bm25_plus_transformer, bm25_plus_features = feature_eng.create_bm25_plus()
+        skipgrams_vectorizer, skipgram_features = feature_eng.create_skipgrams()
+        pos_ngram_vectorizer, pos_ngram_features = feature_eng.create_positional_ngrams()
 
+        # Combine feature names
+        print("Combining feature names...")
+        feature_names = (
+            sentiment_transformer.get_feature_names() +
+            list(freq_vectorizer.get_feature_names_out()) +
+            list(tfidf_vectorizer.get_feature_names_out()) +
+            list(std_tfidf_vectorizer.get_feature_names_out()) +
+            list(bm25l_transformer.count_vectorizer.get_feature_names_out()) +
+            list(bm25_plus_transformer.count_vectorizer.get_feature_names_out()) +
+            list(skipgrams_vectorizer.get_feature_names_out()) +
+            list(pos_ngram_vectorizer.get_feature_names_out())
+        )
 
-# Train a logistic regression model
-#logistic_decision_tree_model                  = sentiment_analyzer.train_model(model_type = "logistic_decision_tree")
+        # Combine feature matrices
+        print("Combining feature matrices...")
+        combined_features = hstack([
+            sentiment_features,
+            freq_features,
+            tfidf_features,
+            std_tfidf_features,
+            bm25l_features,
+            bm25_plus_features,
+            skipgram_features,
+            pos_ngram_features
+        ])
 
-#gaussian_naive_bayes_model                    = sentiment_analyzer.train_model(model_type= "gaussian_naive_bayes")
+        print("Performing feature selection...")
+        # Feature selection
+        feature_selector = TextFeatureSelector(
+            X=combined_features,
+            y=imdb_ratings_data['sentiment'].values,
+            feature_names=feature_names,
+            n_features=None
+        )
+        chi_square_features, chi_square_scores = feature_selector.chi_square_selection()
+        selected_combined_features = combined_features[:, chi_square_features]
 
-#multinomial_naive_bayes_model                   = sentiment_analyzer.train_model(model_type="multinomial_naive_bayes")
+        print("Initializing sentiment analyzer...")
+        # Initialize sentiment analyzer
+        sentiment_analyzer = SentimentAnalyzer(
+            X=selected_combined_features,
+            y=imdb_ratings_data["sentiment"].values,
+            feature_eng=feature_eng,
+            vectorizers=(
+                freq_vectorizer,
+                tfidf_vectorizer,
+                std_tfidf_vectorizer,
+                bm25l_transformer,
+                bm25_plus_transformer,
+                skipgrams_vectorizer,
+                pos_ngram_vectorizer
+            ),
+            selected_feature_indices=chi_square_features
+        )
 
-multi_layer_perceptron_model                    = sentiment_analyzer.train_model(model_type="multilayer_perceptron")
+        print("Training model...")
+        # Train the model
+        multi_layer_perceptron_model = sentiment_analyzer.train_model(
+            model_type="multilayer_perceptron"
+        )
 
-# Evaluate the logistic regression model
-evaluation_results                            = sentiment_analyzer.evaluate_model(multi_layer_perceptron_model)
+        print("Training Accuracy....")
+        # Evaluation
 
-# Predict using the trained model
-test_data                                     = load_csv_data(filepath = TEST_DATA_PATH)
+        evaluation_results = sentiment_analyzer.evaluate_model(multi_layer_perceptron_model)
+        
+        print("Loading and preprocessing test data...")
+        # Load and preprocess test data
+        test_data = load_csv_data(filepath=TEST_DATA_PATH)
+        test_data["clean_text"] = test_data["Text"].apply(preprocessor.clean_text)
 
-logistic_decision_tree_model_predictions, unseen_accuracy = sentiment_analyzer.test_on_unseen_data(model              = multi_layer_perceptron_model, 
-                                                                                       unseen_texts       = list(test_data['Text']),
-                                                                                       unseen_labels      = list(test_data['Sentiment']),
-                                                                                       freq_features      = freq_vectorizer.transform(test_data['Text']),
-                                                                                       std_tfidf_features = std_tfidf_vectorizer.transform(test_data['Text']),
-                                                                                       bm25l_features     = bm25l_transformer.transform(test_data['Text']),
-                                                                                       bm25_plus_features = bm25_plus_transformer.transform(test_data['Text']),
-                                                                                       skipgram_features  = skipgrams_vectorizer.transform(test_data['Text']),
-                                                                                       pos_ngram_features = pos_ngram_vectorizer.transform(test_data['Text']),
-                                                                                       sentiment_features=sentiment_vectorizer.transform(test_data['Text']))  
+        # Transform test sentiment features using the same transformer
+        test_sentiment_features = sentiment_transformer.transform(
+            test_data['clean_text'].tolist()
+        )
 
+        print("Testing model on unseen data...")
+        # Prepare preprocessed features for testing
+        preprocessed_features = {
+            'sentiment_features': test_sentiment_features,
+            'freq_features': freq_vectorizer.transform(test_data['clean_text'].tolist()),
+            'tfidf_features': tfidf_vectorizer.transform(test_data['clean_text'].tolist()),
+            'std_tfidf_features': std_tfidf_vectorizer.transform(test_data['clean_text'].tolist()),
+            'bm25l_features': bm25l_transformer.transform(test_data['clean_text'].tolist()),
+            'bm25_plus_features': bm25_plus_transformer.transform(test_data['clean_text'].tolist()),
+            'skipgram_features': skipgrams_vectorizer.transform(test_data['clean_text'].tolist()),
+            'pos_ngram_features': pos_ngram_vectorizer.transform(test_data['clean_text'].tolist())
+        }
 
-# Compile Actual Test data and PRedicted Result in one Pandas DataFrame
-all_test_data                                 = {'texts'            : list(test_data['Text']), 
-                                                 'true_labels'      : list(test_data['Sentiment']), 
-                                                 'predicted_labels' : list(logistic_decision_tree_model_predictions)
-                                                }
+        # Test the model using the updated method
+        predictions, accuracy = sentiment_analyzer.test_on_unseen_data(
+            model=multi_layer_perceptron_model,
+            unseen_texts=test_data['clean_text'].tolist(),
+            unseen_labels=test_data['Sentiment'].tolist(),
+            **preprocessed_features
+        )
 
-logistic_decision_tree_model_predictions_df   = pd.DataFrame.from_dict(data   = all_test_data, 
-                                                                       orient = 'index').T
+        print("Saving results...")
+        # Save results
+        results_df = pd.DataFrame({
+            'texts': test_data['Text'].tolist(),
+            'true_labels': test_data['Sentiment'].tolist(),
+            'predicted_labels': predictions.tolist()
+        })
+        results_df.to_csv(SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_RESULT, index=False)
+        
+        print(f"Results saved to: {SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_RESULT}")
+        print(f"Final accuracy: {accuracy:.4f}")
 
-# Save the DataFrame to specified path
-logistic_decision_tree_model_predictions_df.to_csv(path_or_buf = SENTIMENT_ANALYSIS_LOGISTIC_DECISION_TREE_RESULT,
-                                                   index       = False)
+    except Exception as e:
+        print(f"Error in main execution: {str(e)}")
+        raise
 
-print (f"Sentiment Analysis result by Losgistic Regression Model has been saved to : {SENTIMENT_ANALYSIS_LOGISTIC_RESULT}")
+if __name__ == "__main__":
+    main()
