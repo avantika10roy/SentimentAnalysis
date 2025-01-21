@@ -101,10 +101,9 @@ class Contextual_Features:
         """
         try:
             print("Creating Position-Based Contextual Features:...")
-            position_vectorizer = CountVectorizer(max_features=self.max_features,
-                                                ngram_range=self.ngram_range)
-            
-            # First, fit and transform the texts normally
+            position_vectorizer = CountVectorizer(max_features = self.max_features,
+                                                  ngram_range  = self.ngram_range)
+
             position_features = position_vectorizer.fit_transform(self.texts)
             
             return position_vectorizer, position_features

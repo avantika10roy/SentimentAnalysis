@@ -1,9 +1,11 @@
+# Deoendencies
 import textstat
 import pandas as pd
 import numpy as np
 from scipy.sparse import csr_matrix
 from nltk.tokenize import word_tokenize, sent_tokenize
 from sklearn.feature_extraction.text import CountVectorizer
+
 
 class Statistical_Feature_Engineering():
     """
@@ -16,7 +18,7 @@ class Statistical_Feature_Engineering():
         """
         self.max_features = max_features
 
-    def document_statistics(self, text, cleaned_text):
+    def create_document_statistics(self, text, cleaned_text):
         """
         Calculates basic documnet statistics i.e. Character Count, Word Count, Sentence Count, Average Word Length(AWL), 
         Average Sentence Length(ASL), Unique Word Ratio(UWR).
@@ -28,23 +30,44 @@ class Statistical_Feature_Engineering():
 
         Returns:
         --------
-        stats_matrix {csr_matrix} : Output data with the calculated document statistics.
+        doct_vect {object} : vectorizer object. 
+
+        doc_stat {csr_matrix} : Output data with the calculated document statistics.
         
         """
+        class document_statistics():
+            def __init__(self):
+                pass
+            def fit_transform(self, text, cleaned_text):
+                char_count = np.array([len(doc) for doc in cleaned_text])
+                word_count = np.array([len(doc.split()) for doc in cleaned_text])
+                sent_count = np.array([len(sent_tokenize(doc)) for doc in text])
+                AWL = char_count/word_count
+                ASL = word_count/sent_count
+                unique_word_count = np.array([len(set(word_tokenize(doc))) for doc in cleaned_text])
+                UWR = unique_word_count/word_count
+
+                stats_matrix = csr_matrix(np.column_stack((char_count, word_count, sent_count, AWL, ASL, UWR)))
+                return stats_matrix
+            
+            def transform(self, text, cleaned_text):
+                char_count = np.array([len(doc) for doc in cleaned_text])
+                word_count = np.array([len(doc.split()) for doc in cleaned_text])
+                sent_count = np.array([len(sent_tokenize(doc)) for doc in text])
+                AWL = char_count/word_count
+                ASL = word_count/sent_count
+                unique_word_count = np.array([len(set(word_tokenize(doc))) for doc in cleaned_text])
+                UWR = unique_word_count/word_count
+
+                stats_matrix = csr_matrix(np.column_stack((char_count, word_count, sent_count, AWL, ASL, UWR)))
+                return stats_matrix
         
-        char_count = np.array([len(doc) for doc in cleaned_text])
-        word_count = np.array([len(doc.split()) for doc in cleaned_text])
-        sent_count = np.array([len(sent_tokenize(doc)) for doc in text])
-        AWL = char_count/word_count
-        ASL = word_count/sent_count
-        unique_word_count = np.array([len(set(word_tokenize(doc))) for doc in cleaned_text])
-        UWR = unique_word_count/word_count
-
-        stats_matrix = csr_matrix(np.column_stack((char_count, word_count, sent_count, AWL, ASL, UWR)))
-        return stats_matrix
+        doct_vect = document_statistics()
+        doc_stat = doct_vect.fit_transform(text=text, cleaned_text=cleaned_text)
+        return doct_vect, doc_stat
 
 
-    def readability_score(self, cleaned_text, score='FRE'):
+    def create_readability_score(self, cleaned_text, score='ALL'):
         """
         Calculates the readability scores i.e. Flesch Readine Ease(FRE), Gunning Fog Index(GFI), SMOG Index(SMOG) 
         and ALL(for all types of score).
@@ -57,31 +80,60 @@ class Statistical_Feature_Engineering():
 
         Returns:
         ---------
-        {csr_matrix}: readability_score according to the score type.
+        readability_vectorizer {object} : vectorizer object.
+        readability_features {csr_matrix} : readability_score according to the score type.
         
         """
-        if score == 'FRE':
-            scores = [textstat.flesch_reading_ease(doc) for doc in cleaned_text]
-            return csr_matrix(scores.values.reshape(-1, 1))
-        elif score == 'GFI':
-            scores = [textstat.gunning_fog(doc) for doc in cleaned_text]
-            return csr_matrix(scores.values.reshape(-1, 1))
-        elif score == 'SMOG':
-            scores = [textstat.smog_index(doc) for doc in cleaned_text]
-            return csr_matrix(scores.values.reshape(-1, 1))
-        elif score == 'ALL':
-            fre = [textstat.flesch_reading_ease(doc) for doc in cleaned_text]
-            gfi = [textstat.gunning_fog(doc) for doc in cleaned_text]
-            smog = [textstat.smog_index(doc) for doc in cleaned_text]
-            
-            combined_scores = pd.DataFrame({'FRE': fre, 'GFI': gfi, 'SMOG': smog})
-            return csr_matrix(combined_scores.values)
-        else:
-            raise ValueError("Unsupported score type. Choose from 'FRE', 'GFI', 'SMOG', or 'ALL'.")
+        class readability_score():
+            def __init__(self):
+                pass
 
+            def fit_transform(self, text, score='ALL'):
+                if score == 'FRE':
+                    scores = [textstat.flesch_reading_ease(doc) for doc in text]
+                    return csr_matrix(scores.values.reshape(-1, 1))
+                elif score == 'GFI':
+                    scores = [textstat.gunning_fog(doc) for doc in text]
+                    return csr_matrix(scores.values.reshape(-1, 1))
+                elif score == 'SMOG':
+                    scores = [textstat.smog_index(doc) for doc in text]
+                    return csr_matrix(scores.values.reshape(-1, 1))
+                elif score == 'ALL':
+                    fre = [textstat.flesch_reading_ease(doc) for doc in text]
+                    gfi = [textstat.gunning_fog(doc) for doc in text]
+                    smog = [textstat.smog_index(doc) for doc in text]
+                    
+                    combined_scores = pd.DataFrame({'FRE': fre, 'GFI': gfi, 'SMOG': smog})
+                    return csr_matrix(combined_scores.values)
+                else:
+                    raise ValueError("Unsupported score type. Choose from 'FRE', 'GFI', 'SMOG', or 'ALL'.")
+
+            def transform(self, text, score='ALL'):
+                if score == 'FRE':
+                    scores = [textstat.flesch_reading_ease(doc) for doc in text]
+                    return csr_matrix(scores.values.reshape(-1, 1))
+                elif score == 'GFI':
+                    scores = [textstat.gunning_fog(doc) for doc in text]
+                    return csr_matrix(scores.values.reshape(-1, 1))
+                elif score == 'SMOG':
+                    scores = [textstat.smog_index(doc) for doc in text]
+                    return csr_matrix(scores.values.reshape(-1, 1))
+                elif score == 'ALL':
+                    fre = [textstat.flesch_reading_ease(doc) for doc in text]
+                    gfi = [textstat.gunning_fog(doc) for doc in text]
+                    smog = [textstat.smog_index(doc) for doc in text]
+                    
+                    combined_scores = pd.DataFrame({'FRE': fre, 'GFI': gfi, 'SMOG': smog})
+                    return csr_matrix(combined_scores.values)
+                else:
+                    raise ValueError("Unsupported score type. Choose from 'FRE', 'GFI', 'SMOG', or 'ALL'.")
+                
+        readability_vectorizer = readability_score()
+        readability_features = readability_vectorizer.fit_transform(text=cleaned_text, score=score)
+        return readability_vectorizer, readability_features
         
 
-    def frequency_distribution(self,cleaned_text):
+    def create_frequency_distribution(self,cleaned_text):
         """
         Calculates the word counts in each document.
 
@@ -94,9 +146,11 @@ class Statistical_Feature_Engineering():
 
         Returns:
         -------
+        count_vectorizer {object} : vectorizer object.
+
         X {csr_matrix} : vectorized sparse matrix.
         
         """
-        vectorizer = CountVectorizer(max_features=self.max_features)
-        X = vectorizer.fit_transform(cleaned_text)
-        return vectorizer, X
+        count_vectorizer = CountVectorizer(max_features=self.max_features)
+        bow = count_vectorizer.fit_transform(cleaned_text)
+        return count_vectorizer, bow

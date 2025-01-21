@@ -36,7 +36,7 @@ from config import SENTIMENT_ANALYSIS_LOGISTIC_DECISION_TREE_RESULT_WITH_CONTEXT
 # Load the data
 imdb_ratings_data                            = load_csv_data(filepath = DATA_PATH)
 
-imdb_ratings_data                            = imdb_ratings_data.head(25000)
+imdb_ratings_data                            = imdb_ratings_data.head(20000)
 
 # Preprocess the text
 preprocessor                                 = TextPreprocessor()

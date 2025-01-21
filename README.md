@@ -104,7 +104,7 @@ Source: Kaggle - IMDB Dataset of 50K Movie Reviews
 Classes: Positive (pos) and Negative (neg) reviews.
 
 ---
-## **Results**
+## **Results on Word-Level Based Features**
 ### **1. Model Performance**
 #### Logistic Regression
 - **Accuracy**: 85.27%
@@ -380,6 +380,145 @@ Classes: Positive (pos) and Negative (neg) reviews.
 | Weighted Avg| 0.89      | 0.89   | 0.89     | 10000   |
 
 - **Accuracy on unseen data**: 73.47%
+
+## **Results after adding Context-Level Features with Word-Level Features**
+### **1. Model Performance**
+#### Logistic Decision Tree
+- **Accuracy**: 72.40%
+
+- **Confusion Matrix**:
+
+| Predicted \ Actual | Positive | Negative |
+|---------------------|----------|----------|
+| Positive           | 1452      | 596      |
+| Negative           | 508       | 1444     |
+
+- **Classification Report**:        
+
+| Class        | Precision | Recall | F1-Score | Support |
+|--------------|-----------|--------|----------|---------|
+| Negative     | 0.74      | 0.71   | 0.72     |  2048   |
+| Positive     | 0.71      | 0.74   | 0.72     |  1952   |
+| **Accuracy** |           |        | **0.72** |  4000   |
+| Macro Avg    | 0.72      | 0.72   | 0.72     |  4000   |
+| Weighted Avg | 0.72      | 0.72   | 0.72     |  4000   |
+
+- **Accuracy on Unseen Data** : 61.22%
+
+
+#### Logistic Gaussian Naive Bayes
+- **Accuracy**: 82.43%
+
+- **Confusion Matrix**:
+
+| Predicted/Actual |  Positive | Negative |
+|------------------|-----------|----------|
+| Positive         | 1663      | 385      |
+| Negative         | 318       | 1634     |
+
+- **Classification Report**:
+
+| Class        | Precision | Recall | F1-score | support |
+|--------------|-----------|--------|----------|---------|
+| Negative     | 0.84      | 0.81   | 0.83     | 2048    |
+| Positive     | 0.81      | 0.84   | 0.82     |  1952   |
+| **Accuracy**             |        | **0.82** |  4000   |
+| Macro Avg    | 0.82      | 0.82   | 0.82     |  4000   |
+| Weighted Avg | 0.82      | 0.82   | 0.82     | 4000    |
+
+- **Accuracy on Unseen Data** : 83.67%
+
+
+#### Gaussian Naive Bayes
+- **Accuracy**: 0.8243
+
+- **Confusion Matrix**:
+
+| Predicted/Actual |  Positive | Negative |
+|------------------|-----------|----------|
+| Positive         | 1663      | 385      |
+| Negative         | 318       | 1634     |
+
+- **Classification Report**:
+
+| Class        | Precision | Recall | F1-score | Support |
+|--------------|-----------|--------|----------|---------|
+| Negative     | 0.84      | 0.81   | 0.83     | 2048    |
+| Positive     | 0.81      | 0.84   | 0.82     | 1952    |
+| **Accuracy** |           |        | **0.82** | 4000    |
+| Macro Avg    | 0.82      | 0.82   | 0.82     | 4000    |
+| Weighted Avg | 0.82      | 0.82   | 0.82     | 4000    |
+
+- **Accuracy on Unseen Data** : 83.67%
+
+
+#### Multilayer Perceptron
+- **Accuracy**: 0.8735
+
+- **Confusion Matrix**:
+
+| Predicted/Actual |  Positive | Negative |
+|------------------|-----------|----------|
+| Positive         | 1761      | 287      |
+| Negative         | 219       | 1733     |
+
+- **Classification Report**:
+
+| Class        | Precision | Recall | F1-score | Support |
+|--------------|-----------|--------|----------|---------|
+| Negative     | 0.89      | 0.86   | 0.87     | 2048    |
+| Positive     | 0.86      | 0.89   | 0.87     | 1952    |
+| **Accuracy** |           |        | **0.87** | 4000    |
+| Macro Avg    | 0.87      | 0.87   | 0.87     | 4000    |
+| Weighted Avg | 0.87      | 0.87   | 0.87     | 4000    |
+
+- **Accuracy on Unseen Data** : 0.8163
+
+
+#### Adaptive Boosting (Adaboost)
+- **Accuracy**: 73.68%
+
+- **Confusion Matrix**:
+
+| Predicted/Actual |  Positive | Negative |
+|------------------|-----------|----------|
+| Positive         | 1354      | 694      |
+| Negative         | 359       | 1593     |
+
+- **Classification Report**:
+
+| Class        | Precision | Recall | F1-Score | Support |
+|--------------|-----------|--------|----------|---------|
+| Negative     | 0.79      | 0.66   | 0.72     | 2048    |
+| Positive     | 0.70      | 0.82   | 0.75     | 1952    |
+| **Accuracy** |           |        | **0.74** | 4000    |
+| Macro Avg    | 0.74      | 0.74   | 0.74     | 4000    |
+| Weighted Avg | 0.74      | 0.74   | 0.74     | 4000    |
+
+- **Accuracy on Unseen Data** : 65.31%
+
+
+#### SVM with RBF kernel
+- **Accuracy**: 88.45%
+
+- **Confusion Matrix**:
+
+| Predicted/Actual |  Positive | Negative |
+|------------------|-----------|----------|
+| Positive         | 1757      | 291      |
+| Negative         | 171       | 1781     |
+
+- **Classification Report**:
+
+| Class        | Precision | Recall | F1-Score | Support |
+|--------------|-----------|--------|----------|---------|
+| Negative     | 0.91      | 0.86   | 0.88     | 2048    |
+| Positive     | 0.86      | 0.91   | 0.89     | 1952    |
+| **Accuracy** |           |        | **0.88** | 4000    |
+| Macro Avg    | 0.89      | 0.89   | 0.88     | 4000    |
+| Weighted Avg | 0.89      | 0.88   | 0.88     | 4000    |
+
+- **Accuracy on Unseen Data** : 57.14%
 
 
 ### **2. Visualizations**

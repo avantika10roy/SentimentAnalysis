@@ -13,6 +13,8 @@ from config import SENTIMENT_ANALYSIS_LOGISTIC_RESULT_BY_STAT_FEAT
 from config import SENTIMENT_ANALYSIS_LIGHTGBM_RESULT_BY_STAT_FEAT
 from src.exploratory_data_analyzer import SentimentEDA
 from src.statistical_feature_engineering import Statistical_Feature_Engineering
+import warnings
+warnings.filterwarnings("ignore")
 
 # Load the data
 train_data                                   = load_csv_data(filepath = DATA_PATH)
@@ -36,20 +38,20 @@ test_data['cleaned_review']                  = test_data['review'].apply(preproc
 # Statistical Feature Engineering
 feature_engineer                             = Statistical_Feature_Engineering(max_features=10000)
 
+doc_vect, train_doc_stat = feature_engineer.create_document_statistics(text=train_data['review'].tolist(),
+                                                    cleaned_text=train_data['cleaned_review'].tolist())
+read_vect, train_readability = feature_engineer.create_readability_score(cleaned_text=train_data['cleaned_review'].tolist(),score='ALL')
+
+
+test_doc_stat = doc_vect.transform(text=test_data['review'].tolist(), cleaned_text=test_data['cleaned_review'].tolist())
+test_readability = read_vect.transform(text=test_data['cleaned_review'].tolist(), score='ALL')
+
 # Document Statistics & Readability Scores
-train_stat_features_sparse                   = hstack([feature_engineer.document_statistics(text=train_data['review'].tolist(),
-                                                                                            cleaned_text=train_data['cleaned_review'].tolist()),
-
-                                                        feature_engineer.readability_score(cleaned_text=train_data['cleaned_review'].tolist(), 
-                                                                                           score='ALL')])
-
-test_stat_features_sparse                    = hstack([feature_engineer.document_statistics(text=test_data['review'].tolist(),
-                                                                                            cleaned_text=test_data['cleaned_review'].tolist()),
-                                                        feature_engineer.readability_score(cleaned_text=test_data['cleaned_review'].tolist(),
-                                                                                            score='ALL')])
+train_stat_features_sparse                   = hstack([train_doc_stat, train_readability])
+test_stat_features_sparse                    = hstack([test_doc_stat, test_readability])
 
 # Frequency Distribution
-bow_vect, train_bow_sparse                   = feature_engineer.frequency_distribution(train_data['cleaned_review'].tolist())
+bow_vect, train_bow_sparse                   = feature_engineer.create_frequency_distribution(train_data['cleaned_review'].tolist())
 test_bow_sparse                              = bow_vect.transform(test_data['cleaned_review'].tolist())
 
 # Model Training
@@ -70,7 +72,7 @@ X_train_selected                             = X_train_combined[:, selected_feat
 
 # Model Training
 sentiment_analyzer                           = SentimentAnalyzer(X_train_selected, y_train, feature_engineer, selected_feature_indices=selected_features)
-model                                        = sentiment_analyzer.train_model(model_type="lightgbm")
+model                                        = sentiment_analyzer.train_model(model_type="logistic_regression")
 
 # Model Evaluation
 metrics                                      = sentiment_analyzer.evaluate_model(model)
@@ -94,8 +96,8 @@ all_test_data                                 = {'texts'            : list(test_
 logistic_prediction_df                        = pd.DataFrame.from_dict(data   = all_test_data, 
                                                                        orient = 'index').T
 
-logistic_prediction_df.to_csv(path_or_buf     = SENTIMENT_ANALYSIS_LIGHTGBM_RESULT_BY_STAT_FEAT,
+logistic_prediction_df.to_csv(path_or_buf     = SENTIMENT_ANALYSIS_LOGISTIC_RESULT_BY_STAT_FEAT,
                               index           = False)
 
-print (f"Sentiment Analysis result by LightGBM Model has been saved to : {SENTIMENT_ANALYSIS_LIGHTGBM_RESULT_BY_STAT_FEAT}")
+print (f"Sentiment Analysis result by logistic regression Model has been saved to : {SENTIMENT_ANALYSIS_LOGISTIC_RESULT_BY_STAT_FEAT}")
 
