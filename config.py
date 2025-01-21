@@ -6,7 +6,7 @@ TEST_DATA_PATH                                                  = 'data/test_dat
 # CONFIGURATION VARIABLES
 BATCH_SIZE                                                      = 250
 MAX_FEATURES                                                    = 1000
-MODEL_NAME                                                      = "svm"
+MODEL_NAME                                                      = "label_propagation"
 KERNEL_NAME                                                     = None # IF MODEL DOESN'T HAVE KERNEL, MAKE IT NONE
 GLOVE_MODEL_PATH                                                = "models/glove.6B.100d.txt"
 ELMO_MODEL_URL                                                  = "https://tfhub.dev/google/elmo/3"
@@ -53,4 +53,13 @@ SENTIMENT_ANALYSIS_ADABOOST_RESULT_WITH_CONTEXTUALS             = 'results/senti
 SENTIMENT_ANALYSIS_LOGISTIC_GAUSSIAN_NAIVE_BAYES_RESULT         = 'results/sentiment_analysis_result_logistic_gaussian_naive_bayes.csv'
 SENTIMENT_ANALYSIS_HIST_GRADIENT_BOOSTING_CLASSIFIER_RESULT     = 'results/sentiment_analysis_result_hist_gradient_boosting_classifier.csv'
 SENTIMENT_ANALYSIS_GAUSSIAN_NAIVE_BAYES_RESULT_WITH_CONTEXTUALS = 'results/sentiment_analysis_gaussian_naive_bayes_with_contextuals.csv'
-
+SENTIMENT_ANALYSIS_LOGISTIC_REG_BY_SEMANTIC_FEAT_RESULT         = 'results/sentiment_analysis_result_logistic_reg_by_semantic_features.csv'
+SENTIMENT_ANALYSIS_SVM_RBF_BY_SEMANTIC_FEAT_RESULT              = 'results/sentiment_analysis_result_svm_rbf_by_semantic_features.csv'
+SENTIMENT_ANALYSIS_SVM_SIGMOID_BY_SEMANTIC_FEAT_RESULT          = 'results/sentiment_analysis_result_svm_sigmoid_by_semantic_features.csv'
+SENTIMENT_ANALYSIS_GAUSSIAN_NB_BY_SEMANTIC_FEAT_RESULT          = 'results/sentiment_analysis_result_gaussian_nb_by_semantic_features.csv'
+SENTIMENT_ANALYSIS_LIGHT_GBM_BY_SEMANTIC_FEAT_RESULT            = 'results/sentiment_analysis_result_light_gbm_by_semantic_features.csv'
+SENTIMENT_ANALYSIS_RANDOM_FOREST_BY_SEMANTIC_FEAT_RESULT        = 'results/sentiment_analysis_result_random_forest_by_semantic_features.csv'
+SENTIMENT_ANALYSIS_LABEL_PROP_BY_SEMANTIC_FEAT_RESULT           = 'results/sentiment_analysis_result_label_prop_by_semantic_features.csv'
+SENTIMENT_ANALYSIS_LOGISTIC_REG_BY_ALL_FEAT_RESULT              = 'results/sentiment_analysis_result_logistic_reg_by_all_features.csv'
+SENTIMENT_ANALYSIS_GAUSSIAN_NB_BY_ALL_FEAT_RESULT               = 'results/sentiment_analysis_result_gaussian_nb_by_all_features.csv'
+SENTIMENT_ANALYSIS_LABEL_PROP_BY_ALL_FEAT_RESULT                = 'results/sentiment_analysis_result_label_prop_by_all_features.csv'
