@@ -1,18 +1,18 @@
 texts,true_labels,predicted_labels
-"This movie is speedy enough with plot twists, but hard to understand the connection between plots.",negative,negative
+"This movie is speedy enough with plot twists, but hard to understand the connection between plots.",negative,positive
 "Seriously, this is the best movie I've ever watched! Everything was flawless!",positive,positive
 "The storyline was okay, but the acting was just not up to the mark.",negative,negative
 A complete disaster of a movie. Don't waste your time.,negative,negative
 I can't believe how amazing this was. Totally worth it!,positive,positive
 "The movie had its moments, but overall, it felt like something was missing.",negative,negative
-"I absolutely loved the cinematography, but the acting was subpar.",negative,positive
+"I absolutely loved the cinematography, but the acting was subpar.",negative,negative
 The film is an excellent example of how not to make a movie.,negative,positive
 It's hard to imagine how anyone could dislike this masterpiece!,positive,negative
 The trailer was better than the actual movie. Felt cheated.,negative,negative
 A rollercoaster of emotions! Highly recommend watching this.,positive,positive
 An average movie with nothing new to offer.,negative,negative
 "The pacing was terrible, and the climax was predictable.",negative,negative
-"Wow, just wow. This is how a movie should be made!",positive,positive
+"Wow, just wow. This is how a movie should be made!",positive,negative
 "A decent watch for a lazy weekend. Not groundbreaking, but enjoyable.",positive,negative
 The director has outdone themselves; what a phenomenal movie!,positive,negative
 More hype than substance. A complete letdown.,negative,negative
@@ -46,5 +46,5 @@ The lead actor was the only saving grace in an otherwise dull film.,negative,neg
 A pretentious attempt at storytelling that falls flat.,negative,negative
 "I didn’t expect much, but this movie surprised me in the best way.",positive,positive
 A series of poorly executed clichés masquerading as a story.,negative,negative
-This is not just a movie; it’s an experience. Brilliant!,positive,positive
+This is not just a movie; it’s an experience. Brilliant!,positive,negative
 A slog of a movie with a laughably bad ending.,negative,negative
