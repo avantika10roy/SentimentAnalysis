@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.preprocessing import StandardScaler
-from src.document_level_feature import TextFeatureEngineering_document
+from src.document_level_feature_engineering import TextFeatureEngineering_document
 from config import DATA_PATH
 def main():
     # Load the IMDB dataset
