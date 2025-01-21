@@ -360,26 +360,26 @@ Classes: Positive (pos) and Negative (neg) reviews.
 
 
 ### Multi-Layer Perceptron
-- **Accuracy**: 88.76%
+- **Accuracy**: 89.03%
 
 - **Confusion Matrix**:
 
 | Predicted \ Actual | Positive | Negative |
 |---------------------|----------|----------|
-| Positive           | 4357      | 604      |
-| Negative           | 520       | 4519     |
+| Positive           | 4355      | 606      |
+| Negative           | 491       | 4548     |
 
 - **Classification Report**:
 
 | Class       | Precision | Recall | F1-Score | Support |
 |-------------|-----------|--------|----------|---------|
-| Negative    | 0.89      | 0.88   | 0.89     | 4961    |
+| Negative    | 0.90      | 0.88   | 0.89     | 4961    |
 | Positive    | 0.88      | 0.90   | 0.89     | 5039    |
 | **Accuracy**|           |        | **0.89** | 10000   |
 | Macro Avg   | 0.89      | 0.89   | 0.89     | 10000   |
 | Weighted Avg| 0.89      | 0.89   | 0.89     | 10000   |
 
-- **Accuracy on unseen data**: 73.47%
+- **Accuracy on unseen data**: 87.76%
 
 ## **Results after adding Context-Level Features with Word-Level Features**
 ### **1. Model Performance**
