@@ -41,7 +41,7 @@ test_data['clean_text']                    = test_data['Text'].apply(preprocesso
 word_level_features                          = TextFeatureEngineering(list(imdb_ratings_df['clean_text']),
                                                                       max_features=20000)
 
-tfidf_vectorizer, tfidf_sparse               = word_level_features.create_tfidf() 
+tfidf_vectorizer, tfidf_sparse               = word_level_features.create_standardized_tfidf()
 
 new_selector                                 = TextFeatureSelector(X             = tfidf_sparse,
                                                                    y             = imdb_ratings_df['sentiment'].values,
