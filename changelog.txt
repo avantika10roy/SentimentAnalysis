@@ -3,22 +3,90 @@
 |---------------|-------------------------------------------|-----------------------|----------------------------|----------------|-----------------|---------------|
 | name          | feature engineering                       | model                 | features used              | train accuracy | test accuracy   | status        |
 |---------------|-------------------------------------------|-----------------------|----------------------------|----------------|-----------------|---------------|
-| Arnab         | character level feature engineering       |                       |                            |                |                 | pending       |
-| Amrit         | classification feature engineering        |                       |                            |                |                 | pending       |
-| Jit           | statistical feature engineering           |                       |                            |                |                 | pending       |
-| Avantika      | contextual feature engineering            | Multilayer Perceptron | frequency features,        |                |                 |               |
+|               |                                           |                       |                            |                |                 |               |
+|               |                                           |                       |                            |                |                 |               |
+| Arnab         |   Character - Level Feature Engineering   |                       |                            |                |                 |    PENDING    |
+|               |                                           |                       |                            |                |                 |               |
+|               |                                           |                       |                            |                |                 |               |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|               |                                           |                       |                            |                |                 |               |
+|               |                                           |                       |                            |                |                 |               |
+| Amrit         |     Classification Feature Engineering    |                       |                            |                |                 |    PENDING    |
+|               |                                           |                       |                            |                |                 |               |
+|               |                                           |                       |                            |                |                 |               |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|               |                                           |                       | Total Characters           |                |                 |               |
+|               |                                           |                       | Total Words                |                |                 |               |
+|               |                                           |                       | Total Sentence             |                |                 |               |
+|               |                                           |                       | Average Word Length        |                |                 |               |
+|               |                                           |                       | Average Sentence Length    |                |                 |               |
+| Jit           |      Statistical Feature Engineering      |  Logistic Regression  | Unique Words Ratio         |      88%       |       79%       |    PENDING    |
+|               |                                           |                       | Flesch Reading Ease        |                |                 |               |
+|               |                                           |                       | Gunning Fox Index          |                |                 |               |
+|               |                                           |                       | SMOG Index                 |                |                 |               |
+|               |                                           |                       | Bag of Words               |                |                 |               |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|               |                                           |                       | frequency features,        |                |                 |               |
 |               |                                           |                       | standard tfidf,            |                |                 |               |
 |               |                                           |                       | bm25f features,            |                |                 |               |
 |               |                                           |                       | bm25 plus features,        |                |                 |               |
-|               |                                           |                       | skipgram features,         |                |                 |               |
+| Avantika      |      Contextual Feature Engineering       | Multilayer Perceptron | skipgram features,         |       87%      |       81%       |     DONE      |
 |               |                                           |                       | positional ngram features, |                |                 |               |
 |               |                                           |                       | window features,           |                |                 |               |
 |               |                                           |                       | positional features,       |                |                 |               |
 |               |                                           |                       | sequential features,       |                |                 |               |
-|               |                                           |                       | tfidf matrix               |  87%           | 81%             | done          |
-| Priyam        | semantic feature engineering              |                       |                            |                |                 | pending       |
-| Subhas        | syntactic feature engineering             |                       |                            |                |                 | done          |
-| Ankita        | sentiment feature engineering             |                       |                            |                |                 | pending       |
-| Anjisnu       | document-level feature engineering        |                       |                            |                |                 | pending       |
-| Soumik        | sentiment feature engineering (2)         |                       |                            |                |                 | pending       |
-| Manu          | Model Optimization                        |                       |                            |                |                 | pending       |
+|               |                                           |                       | tfidf matrix               |                |                 |               |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|               |                                           |                       | word2vec                   |                |                 |               |
+|               |                                           |                       | Frequency Based            |                |                 |               |
+|               |                                           |                       | Standardized TF-IDF        |                |                 |               |
+|               |                                           |                       | BM25F                      |       88%      |       80%       |     DONE      |
+| Priyam        |       Semantic Feature Engineering        | Multilayer Perceptron | BM25 Plus                  |                |                 |               |
+|               |                                           |                       | Skip Gram                  |                |                 |               |
+|               |                                           |                       | Positional N Gram          |                |                 |               |
+|               |                                           |                       | Window Features            |                |                 |               |
+|               |                                           |                       | Trigram Contextual         |                |                 |               |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|               |                                           |                       | POS-Tag Patterns           |                |                 |               |
+|               |                                           |                       | Dependency Relationships   |                |                 |               |
+|               |                                           |                       | Parse Tree Features        |                |                 |               |
+| Subhas        |       Syntactic Feature Engineering       |  Gaussian Naive Bayes | Phrase Structures          |      82%       |       79%       |     DONE      |
+|               |                                           |                       | Grammar Based Features     |                |                 |               |
+|               |                                           |                       | TF-IDF                     |                |                 |               |
+|               |                                           |                       | BM25                       |                |                 |               |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|               |                                           |                       |                            |                |                 |               |
+|               |                                           |                       |                            |                |                 |               |
+| Ankita        |       Sentiment Feature Engineering       |                       |                            |                |                 |    PENDING    |
+|               |                                           |                       |                            |                |                 |               |
+|               |                                           |                       |                            |                |                 |               |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|               |                                           |                       | Word Level TF-IDF          |                |                 |               |
+|               |                                           |                       | Character Level TF-IDF     |                |                 |               |
+|               |                                           |                       | Word Count                 |                |                 |               |
+|               |                                           |                       | Character Count            |                |                 |               |
+|               |                                           |                       | Average Word Length        |                |                 |               |
+|               |                                           |                       | Unique Word Ratio          |                |                 |               |
+|               |                                           |                       | Capitalization Ratio       |                |                 |               |
+|               |                                           |                       | LSI                        |                |                 |               |
+| Anjisnu       |    Document-Level Feature Engineering     |    Gradient Boost     | LDA                        |       86%      |        84%      |    PENDING    |
+|               |                                           |                       | Similarity Matrix          |                |                 |               |
+|               |                                           |                       | Document Embeddings        |                |                 |               |
+|               |                                           |                       | Starts with Capitalization |                |                 |               |
+|               |                                           |                       | Exclamation Count          |                |                 |               |
+|               |                                           |                       | Question Count             |                |                 |               |
+|               |                                           |                       | Longs Word Ratio           |                |                 |               |
+|               |                                           |                       | Digit Ratio                |                |                 |               |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|               |                                           |                       | Bag of Words               |                |                 |               |
+|               |                                           |                       | TF-IDF                     |                |                 |               |
+|               |                                           |                       | Standardized TF-IDF        |                |                 |               |
+|               |                                           |                       | BM25L                      |                |                 |               |
+| Soumik        |     Sentiment Feature Engineering (2)     | Multilayer Perceptron | BM25 Plus                  |       88%      |        87%      |    PENDING    |
+|               |                                           |                       | Skip Grams                 |                |                 |               |
+|               |                                           |                       | Positional N Grams         |                |                 |               |
+|               |                                           |                       | Sentiment Features         |                |                 |               |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Manu          |           Model Optimization              |  Logistic Regression  | TF-IDF                     |       84%      |       91%       |    PENDING    |
+|               |                                           |                       | Word2Vec                   |                |                 |               |
+|               |                                           |                       |                            |                |                 |               |
