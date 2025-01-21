@@ -1,22 +1,24 @@
 # Whoever make what changes, please update those here in this file to maintain the code changes updated for everyone
 
-|---------------|-------------------------------------------|---------------|
-| name          | feature engineering                       | status        |
-|---------------|-------------------------------------------|---------------|
-| Arnab         | character level feature engineering       | pending       |
-| Amrit         | classification feature engineering        | pending       |
-| Jit           | statistical feature engineering           | pending       |
-| Avantika      | contextual feature engineering            | done          |
-| Priyam        | semantic feature engineering              | pending       |
-| Subhas        | syntactic feature engineering             | done          |
-| Ankita        | sentiment feature engineering             | pending       |
-| Anjisnu       | document-level feature engineering        | pending       |
-| Soumik        | sentiment feature engineering (2)         | done       |
-| Manu          | Model Optimization                        | pending       |
-|
-|
-|
-|
-|
-|
-|
+|---------------|-------------------------------------------|-----------------------|----------------------------|----------------|-----------------|---------------|
+| name          | feature engineering                       | model                 | features used              | train accuracy | test accuracy   | status        |
+|---------------|-------------------------------------------|-----------------------|----------------------------|----------------|-----------------|---------------|
+| Arnab         | character level feature engineering       |                       |                            |                |                 | pending       |
+| Amrit         | classification feature engineering        |                       |                            |                |                 | pending       |
+| Jit           | statistical feature engineering           |                       |                            |                |                 | pending       |
+| Avantika      | contextual feature engineering            | Multilayer Perceptron | frequency features,        |                |                 |               |
+|               |                                           |                       | standard tfidf,            |                |                 |               |
+|               |                                           |                       | bm25f features,            |                |                 |               |
+|               |                                           |                       | bm25 plus features,        |                |                 |               |
+|               |                                           |                       | skipgram features,         |                |                 |               |
+|               |                                           |                       | positional ngram features, |                |                 |               |
+|               |                                           |                       | window features,           |                |                 |               |
+|               |                                           |                       | positional features,       |                |                 |               |
+|               |                                           |                       | sequential features,       |                |                 |               |
+|               |                                           |                       | tfidf matrix               |  87%           | 81%             | done          |
+| Priyam        | semantic feature engineering              |                       |                            |                |                 | pending       |
+| Subhas        | syntactic feature engineering             |                       |                            |                |                 | done          |
+| Ankita        | sentiment feature engineering             |                       |                            |                |                 | pending       |
+| Anjisnu       | document-level feature engineering        |                       |                            |                |                 | pending       |
+| Soumik        | sentiment feature engineering (2)         |                       |                            |                |                 | pending       |
+| Manu          | Model Optimization                        |                       |                            |                |                 | pending       |
