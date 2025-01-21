@@ -3,6 +3,7 @@ from sklearn.svm import SVC
 from scipy.sparse import hstack
 from scipy.sparse import issparse
 from lightgbm import LGBMClassifier
+from config import MODEL_PARAMS_DICT
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
@@ -73,7 +74,7 @@ class SentimentAnalyzer:
             Trained model
         """
         if (model_type == "logistic_regression"):
-            model = LogisticRegression(max_iter = 1000, 
+            model = LogisticRegression(max_iter = MODEL_PARAMS_DICT['max_iter'], 
                                        **kwargs)
             
         elif (model_type == "svm"):
@@ -107,42 +108,42 @@ class SentimentAnalyzer:
 
         elif (model_type == 'label_propagation'):
             model = LabelPropagation(kernel      = 'knn',
-                                     n_neighbors = 2,
-                                     max_iter    = 10000,
-                                     tol         = 0.001,
+                                     n_neighbors = MODEL_PARAMS_DICT['n_neighbors'], 
+                                     max_iter    = MODEL_PARAMS_DICT['max_iter'], 
+                                     tol         = MODEL_PARAMS_DICT['tol'],
                                      **kwargs
                                     )
 
         elif (model_type == "multilayer_perceptron"):
-            model = MLPClassifier(hidden_layer_sizes = (1000,), 
-                                  max_iter           = 1000, 
+            model = MLPClassifier(hidden_layer_sizes = MODEL_PARAMS_DICT['hidden_layer_size'], 
+                                  max_iter           = MODEL_PARAMS_DICT['max_iter'], 
                                   **kwargs)
 
         elif (model_type == 'hist_gradient_boosting_classifier'):
             if issparse(self.X_train):
                 self.X_train = self.X_train.toarray()
 
-            model = HistGradientBoostingClassifier(loss              = 'log_loss', 
-                                                   learning_rate     = 0.01, 
-                                                   max_iter          = 1000,
-                                                   min_samples_leaf  = 3,
-                                                   l2_regularization = 0.01,
-                                                   max_features      = 1.0,
+            model = HistGradientBoostingClassifier(loss              = MODEL_PARAMS_DICT['loss'], 
+                                                   learning_rate     = MODEL_PARAMS_DICT['learning_rate'], 
+                                                   max_iter          = MODEL_PARAMS_DICT['max_iter'],
+                                                   min_samples_leaf  = MODEL_PARAMS_DICT['min_samples_leaf'],
+                                                   l2_regularization = MODEL_PARAMS_DICT['l2_regularization'],
+                                                   max_features      = MODEL_PARAMS_DICT['max_features'],
                                                    **kwargs)
 
 
         elif (model_type == "logistic_decision_tree"):
             # Create a logistic regression model
-            logistic_model      = LogisticRegression(max_iter = 1000, 
-                                                     penalty  = 'l2', 
-                                                     C        = 1.0, 
-                                                     solver   = 'lbfgs',
+            logistic_model      = LogisticRegression(max_iter = MODEL_PARAMS_DICT['max_iter'], 
+                                                     penalty  = MODEL_PARAMS_DICT['penalty'], 
+                                                     C        = MODEL_PARAMS_DICT['C'], 
+                                                     solver   = MODEL_PARAMS_DICT['solver'],
                                                      **kwargs)
 
             # Create a decision tree model
-            decision_tree_model = DecisionTreeClassifier(max_depth         = 50, 
-                                                         min_samples_split = 10, 
-                                                         min_samples_leaf  = 5,
+            decision_tree_model = DecisionTreeClassifier(max_depth         = MODEL_PARAMS_DICT['max_depth'], 
+                                                         min_samples_split = MODEL_PARAMS_DICT['min_samples_split'], 
+                                                         min_samples_leaf  = MODEL_PARAMS_DICT['min_samples_leaf'],
                                                          **kwargs)
 
             # Combine them in a stacking model
@@ -153,10 +154,10 @@ class SentimentAnalyzer:
         
         elif (model_type == "logistic_gaussian_naive_bayes"):
             # Create a logistic regression model
-            logistic_model = LogisticRegression(max_iter = 10000, 
-                                                penalty  = 'l1', 
-                                                C        = 0.01, 
-                                                solver   = 'liblinear',
+            logistic_model = LogisticRegression(max_iter = MODEL_PARAMS_DICT['max_iter'], 
+                                                penalty  = MODEL_PARAMS_DICT['penalty'], 
+                                                C        = MODEL_PARAMS_DICT['C'], 
+                                                solver   = MODEL_PARAMS_DICT['solver'],
                                                 **kwargs)
 
             # Gaussian Naive Bayes does not work with sparse matrices, so convert to dense if needed
@@ -174,7 +175,7 @@ class SentimentAnalyzer:
         
         else:
             raise ValueError("Unsupported model_type. Choose from : 'logistic_regression', 'svm', 'random_forest', 'multinomial_naive_bayes', \
-                             'gaussian_naive_bayes', 'adaboost', 'gradient_boost', 'lightgbm', 'logistic_decision_tree', 'multilayer_perceptron".replace('  ', ''))
+                             'gaussian_naive_bayes', 'adaboost', 'gradient_boost', 'lightgbm', 'logistic_decision_tree', 'logistic_gaussian_naive_bayes', 'multilayer_perceptron".replace('  ', ''))
 
         print(f"Training {model_type}...")
         model.fit(self.X_train, self.y_train)
