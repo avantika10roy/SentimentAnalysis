@@ -134,6 +134,9 @@ class SentimentFeatureEngineering:
             raise
 
     class SentimentTransformer(BaseEstimator, TransformerMixin):
+        """
+        A custom transformer for extracting sentiment-related features from text data
+        """
         def __init__(self, analyzer, batch_size=1000):
             self.analyzer = analyzer
             self.batch_size = batch_size
@@ -148,15 +151,15 @@ class SentimentFeatureEngineering:
             # Get initial results to determine feature structure
             results = self.analyzer.batch_analyze_sentiment(texts, self.batch_size)
             if results:
-                # Get sample result for structure
+                
                 sample_result = results[0]
                 
-                # First collect all unique emotions across all results
+                # Collecting all unique emotions across all results
                 self.emotion_set = set()
                 for result in results:
                     self.emotion_set.update(result['emotion_counts'].keys())
                 
-                # Now build feature names using the complete emotion set
+                # Building feature names using the complete emotion set
                 self.feature_names = (
                     # VADER sentiment features
                     [f'vader_{k}' for k in sample_result['vader_sentiment'].keys()] +
@@ -189,9 +192,9 @@ class SentimentFeatureEngineering:
                 for k, v in vader.items():
                     feature_dict[f'vader_{k}'].append(v)
 
-                # Emotion counts - use the established emotion set
+                # Emotion counts 
                 emotions = result['emotion_counts']
-                for emotion in sorted(self.emotion_set):  # Use sorted to maintain order
+                for emotion in sorted(self.emotion_set):  
                     feature_dict[f'emotion_{emotion}'].append(emotions.get(emotion, 0))
 
                 # Aspect sentiments

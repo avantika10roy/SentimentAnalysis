@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split
 from src.exploratory_data_analyzer import SentimentEDA
 from src.word_level_feature_engineering import TextFeatureEngineering
 from src.sentiment_analysis_feature import SentimentFeatureEngineering
+import time
 from config import (
     SENTIMENT_ANALYSIS_SVM_RBF_RESULT,
     SENTIMENT_ANALYSIS_LOGISTIC_RESULT,
@@ -134,6 +135,8 @@ def main():
         # Train the model
         multi_layer_perceptron_model = sentiment_analyzer.train_model(
             model_type="multilayer_perceptron"
+            #model_type="adaboost"
+            #model_type="gaussian_naive_bayes"
         )
 
         print("Training Accuracy....")
@@ -183,6 +186,10 @@ def main():
         
         print(f"Results saved to: {SENTIMENT_ANALYSIS_MULTILAYER_PERCEPTRON_RESULT}")
         print(f"Final accuracy: {accuracy:.4f}")
+
+
+        total_start_time = time.time()
+
 
     except Exception as e:
         print(f"Error in main execution: {str(e)}")
