@@ -40,8 +40,8 @@
 |               |                                           |                       | word2vec                   |                |                 |               |
 |               |                                           |                       | Frequency Based            |                |                 |               |
 |               |                                           |                       | Standardized TF-IDF        |                |                 |               |
-|               |                                           |                       | BM25F                      |       88%      |       80%       |     DONE      |
-| Priyam        |       Semantic Feature Engineering        | Multilayer Perceptron | BM25 Plus                  |                |                 |               |
+|               |                                           |                       | BM25F                      |       89%      |       84%       |     DONE      |
+| Priyam        |       Semantic Feature Engineering        |  Gaussian Naive Bayes | BM25 Plus                  |                |                 |               |
 |               |                                           |                       | Skip Gram                  |                |                 |               |
 |               |                                           |                       | Positional N Gram          |                |                 |               |
 |               |                                           |                       | Window Features            |                |                 |               |

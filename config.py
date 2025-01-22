@@ -6,12 +6,17 @@ Emotion_path                                                    = 'data/emotion_
 
 # CONFIGURATION VARIABLES
 BATCH_SIZE                                                      = 250
-MAX_FEATURES                                                    = 5000
+MAX_FEATURES                                                    = 500
 MODEL_NAME                                                      = "multilayer_perceptron"
 KERNEL_NAME                                                     = None # IF MODEL DOESN'T HAVE KERNEL, MAKE IT NONE
 GLOVE_MODEL_PATH                                                = "models/glove.6B.100d.txt"
 ELMO_MODEL_URL                                                  = "https://tfhub.dev/google/elmo/3"
 WORD2VEC_MODEL                                                  = "word2vec-google-news-300"
+BERT_CONFIG                                                     = "models/BERT/config.json"
+BERT_MODEL_SAFETENSORS                                          = "models/BERT/model.safetensors"
+BERT_TOKENIZER_CONFIG                                           = "models/BERT/tokenizer_config.json"
+BERT_TOKENIZER                                                  = "models/BERT/tokenizer.json"
+BERT_VOCABULARY                                                 = "models/BERT/vocab.txt"
 
 
 # PARAMETER DICTIONARY
