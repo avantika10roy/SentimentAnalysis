@@ -87,10 +87,12 @@
 |               |                                           |                       | Positional N Grams         |                |                 |               |
 |               |                                           |                       | Sentiment Features         |                |                 |               |
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Manu          |           Model Optimization              |  Logistic Regression  | TF-IDF                     |       84%      |       91%       |    PENDING    |
+|               |                                           |                       | Bag of Words               |                |                 |               |
+|               |                                           |                       | Standardized TF-IDF        |                |                 |               |
+| Manu          |             Model Optimization            |  Logistic Regression  | BM25F                      |       84%      |        93%      |    PENDING    |
+|               |                                           |                       | Skipgram                   |                |                 |               |
+|               |                                           |                       | Positional n-grams         |                |                 |               |
 |               |                                           |                       | Word2Vec                   |                |                 |               |
-|               |                                           |                       |                            |                |                 |               |
-|               |                                           |                       |                            |                |                 |               |
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |               |                                           |                       | Standard TF-IDF            |                |                 |               |
 |               |                                           |                       | BM25F                      |                |                 |               |

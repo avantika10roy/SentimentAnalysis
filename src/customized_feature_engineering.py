@@ -79,7 +79,7 @@ class TextVectorizer:
         :param word: Word for which the vector is to be retrieved.
         :return: Weighted vector for the word.
         """
-        if word in self.model.key_to_index:
+        if word in self.model.key_to_index and word in self.feature_names:
             vector = self.model[word].copy()
             if word in self.feature_names:
                 vector *= self.weight_factor
