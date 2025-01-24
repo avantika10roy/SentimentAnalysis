@@ -8,9 +8,24 @@ import numpy as np
 
 import tensorflow_hub as hub
 
+from sklearn.decomposition import PCA
+
 from gensim.models import Word2Vec
 from gensim.models import FastText
 from nltk.corpus import wordnet as wn
+
+from transformers import AutoModel
+from transformers import BertModel
+from transformers import AutoTokenizer
+from transformers import BertTokenizer
+from transformers import PretrainedConfig
+
+from config import MAX_FEATURES
+from config import BERT_CONFIG
+from config import BERT_TOKENIZER
+from config import BERT_VOCABULARY
+from config import BERT_TOKENIZER_CONFIG
+from config import BERT_MODEL_SAFETENSORS
 
 
 # ----- SEMANTIC FEATURE ENGINEERING -----
@@ -68,7 +83,7 @@ class Semantic_Feature_Engineering:
                 - np.ndarray : Document-level feature matrix (each document represented as the average of its word vectors).
         """
         try:
-            print("Creating Word2Vec (CBOW) features...")
+            print("Creating Word2Vec (CBOW) features")
             
             if vector_size is None:
                 vector_size = self.max_features
@@ -102,7 +117,7 @@ class Semantic_Feature_Engineering:
             if self.max_features is not None and self.max_features < vector_size:
                 feature_matrix      = feature_matrix[:, :self.max_features]
         
-            print(f"Created Word2Vec (CBOW) features with shape: {feature_matrix.shape}")
+            print(f"Created {MAX_FEATURES} Word2Vec (CBOW) features with shape: {feature_matrix.shape}")
         
             return w2v_model, feature_matrix
 
@@ -129,7 +144,7 @@ class Semantic_Feature_Engineering:
         """
 
         try:
-            print("Creating GloVe features...")
+            print("Creating GloVe features")
             
             if desired_features is None:
                 desired_features = self.max_features
@@ -163,7 +178,7 @@ class Semantic_Feature_Engineering:
             if desired_features < embedding_dim:
                 feature_matrix             = feature_matrix[:, :desired_features]
         
-            print(f"GloVe features created with shape: {feature_matrix.shape}")
+            print(f"{MAX_FEATURES} GloVe features created with shape: {feature_matrix.shape}")
         
             return glove_embeddings, feature_matrix
 
@@ -191,7 +206,7 @@ class Semantic_Feature_Engineering:
                 - np.ndarray  : Document-level feature matrix (each document represented as the average of its word vectors).
         """
         try:
-            print("Creating FastText (skip-gram) features...")
+            print("Creating FastText (skip-gram) features")
             
             if vector_size is None:
                 vector_size = self.max_features
@@ -214,7 +229,7 @@ class Semantic_Feature_Engineering:
                 vectors             = [fasttext_model.wv[word] for word in tokens if word in fasttext_model.wv]
             
                 if vectors:
-                    document_vector = np.mean(vectors, axis=0)
+                    document_vector = np.mean(vectors, axis = 0)
                 else:
                     document_vector = np.zeros(vector_size)
             
@@ -225,7 +240,7 @@ class Semantic_Feature_Engineering:
             if self.max_features is not None and self.max_features < vector_size:
                 feature_matrix       = feature_matrix[:, :self.max_features]
         
-            print(f"Created FastText (skip-gram) features with shape: {feature_matrix.shape}")
+            print(f"Created {MAX_FEATURES} FastText (skip-gram) features with shape: {feature_matrix.shape}")
         
             return fasttext_model, feature_matrix
 
@@ -278,40 +293,46 @@ class Semantic_Feature_Engineering:
                 - np.ndarray   : Document-level feature matrix (average ELMo embeddings for each document).
                 - elmo         : The trained ELMo model (vectorizer).
             """
+            
+            try:
+                print("Creating ELMo Model Features")
     
-            # Load the pre-trained ELMo model from TensorFlow Hub
-            elmo_model = hub.load(model_url)
+                elmo_model = hub.load(model_url)
 
             
-            document_embeddings  = []
+                document_embeddings  = []
             
-            for text in self.texts:
-                tokens           = text.split()
+                for text in self.texts:
+                    tokens           = text.split()
                 
-                if len(tokens) == 0:
-                    document_embeddings.append(np.zeros(1024)) 
-                    continue
+                    if len(tokens) == 0:
+                        document_embeddings.append(np.zeros(1024)) 
+                        continue
                 
-                embeddings       = elmo_model.signatures["default"](input={"tokens": tokens})["output"]
+                    embeddings       = elmo_model.signatures["default"](input={"tokens": tokens})["output"]
                 
-                document_vector  = np.mean(embeddings, axis=0)
+                    document_vector  = np.mean(embeddings, axis=0)
                 
-                document_embeddings.append(document_vector)
+                    document_embeddings.append(document_vector)
             
-            feature_matrix       = np.array(document_embeddings)
+                feature_matrix       = np.array(document_embeddings, dtype = np.float32)
 
-            if self.max_features is not None and self.max_features < 1024:
-                feature_matrix  = feature_matrix[:, :self.max_features]
+                if self.max_features is not None and self.max_features < 1024:
+                    feature_matrix   = feature_matrix[:, :self.max_features]
+                    
+                print(f"Created {MAX_FEATURES} ELMo Semantic Features: {feature_matrix.shape}")
             
-            return feature_matrix, elmo_model
+                return feature_matrix, elmo_model
+            
+            except Exception as e:
+                raise Exception(f"Error in creating ELMo features: {str(e)}")
     
     # ------ WORDNET FEATURES -----
-        
+
     def wordnet(self) -> tuple:
-    
         """
         Generate semantic features using WordNet, including synonyms, hypernyms, hyponyms, 
-        and meronyms, and return the feature list and WordNet corpus.
+        and meronyms, and return the feature matrix and WordNet corpus.
     
         Arguments:
         ----------
@@ -319,50 +340,193 @@ class Semantic_Feature_Engineering:
     
         Returns:
         --------
-         tuple:
-             - list                                           : A list of dictionaries where each dictionary 
-                                                                contains synonyms, hypernyms, hyponyms, and 
-                                                                meronyms for words in the corresponding document.
-                                                                
-             - nltk.corpus.reader.wordnet.WordNetCorpusReader : The WordNet corpus used for feature extraction.
+            tuple:
+                - list                 : Document-level feature matrix where each document is represented 
+                                         as aggregated WordNet-based features.
+                - WordNetCorpusReader  : The WordNet corpus used for feature extraction.
         """
     
-    
-        wordnet_features   = []
-    
-        for doc in self.texts:
-            doc_features   = {"synonyms": [], "hypernyms": [], "hyponyms": [], "meronyms": []}
+        try:
+            print("Creating WordNet-based semantic features")
         
-            for word in doc.split():
-                synsets    = wn.synsets(word)
-            
-                # SYNOMYMS
-                synonyms   = set()
-                for synset in synsets:
-                    synonyms.update(lemma.name() for lemma in synset.lemmas())
+            wordnet_features_list = []
+
+            for doc in self.texts:
+
+                synonyms           = set()
+                hypernyms          = set()
+                hyponyms           = set()
+                meronyms           = set()
+
+                for word in doc.split():
+                    synsets        = wn.synsets(word)
                     
-                # HYPERNYMS
-                hypernyms  = set()
-                for synset in synsets:
-                    hypernyms.update(lemma.name() for hyper in synset.hypernyms() for lemma in hyper.lemmas())
-            
-                # HYPONYMS
-                hyponyms   = set()
-                for synset in synsets:
-                    hyponyms.update(lemma.name() for hypo in synset.hyponyms() for lemma in hypo.lemmas())
-            
-                # MERONYMS
-                meronyms   = set()
-                for synset in synsets:
-                    meronyms.update(lemma.name() for mero in synset.part_meronyms() for lemma in mero.lemmas())
-            
-                doc_features["synonyms"].append(list(synonyms))
-                doc_features["hypernyms"].append(list(hypernyms))
-                doc_features["hyponyms"].append(list(hyponyms))
-                doc_features["meronyms"].append(list(meronyms))
+                    # SYNONYMS
+                    for synset in synsets:
+                        synonyms.update(lemma.name() for lemma in synset.lemmas())
+                    
+                    # HYPERNYMS
+                    for synset in synsets:
+                        hypernyms.update(lemma.name() for hyper in synset.hypernyms() for lemma in hyper.lemmas())
+
+                    # HYPONYMS
+                    for synset in synsets:
+                        hyponyms.update(lemma.name() for hypo in synset.hyponyms() for lemma in hypo.lemmas())
+
+                    # MERONYMS
+                    for synset in synsets:
+                        meronyms.update(lemma.name() for mero in synset.part_meronyms() for lemma in mero.lemmas())
+
+                document_features  = {"synonyms": list(synonyms),"hypernyms": list(hypernyms),"hyponyms": list(hyponyms),"meronyms": list(meronyms)}
+
+                wordnet_features_list.append(document_features)
+
+            feature_matrix         = np.array([len(doc_features["synonyms"]) 
+                                               for doc_features in wordnet_features_list], 
+                                              dtype = np.float32).reshape(-1, 1)
+
+            print(f"Created {MAX_FEATURES} WordNet-based features with shape: {feature_matrix.shape}")
+
+            return wn, feature_matrix
+
+        except Exception as e:
+            raise Exception(f"Error in creating WordNet-based features: {str(e)}")
+    
+    # ----- BERT LEVEL FEATURES -----
+    
+    def bert(self, max_seq_length: int = 128, max_features: int = None) -> tuple:
+    
+        """
+        Generate semantic features using a pre-trained BERT model and return the transformer, feature matrix, and feature names.
+
+        Arguments:
+        ----------
+            max_seq_length : Maximum sequence length for BERT input (default: 128)
+            max_features   : Number of features to reduce the embeddings to (default: None, uses MAX_FEATURES).
+
+        Returns:
+        --------
+            tuple:
+                - BertModel       : The loaded pre-trained BERT model.
+                - np.ndarray      : Document-level feature matrix (each document represented as the CLS token embedding).
+                - list            : List of extracted feature names (unique tokens).
+        """
         
-            wordnet_features.append(doc_features)
+        try:
+            if max_features is None:
+                max_features        = MAX_FEATURES
+
+            print(f"Creating BERT-based features using pre-trained model")
+
+            config                  = PretrainedConfig.from_json_file(BERT_CONFIG)
+            
+            tokenizer               = BertTokenizer.from_pretrained(BERT_TOKENIZER_CONFIG,
+                                                                    tokenizer_file = BERT_TOKENIZER,
+                                                                    vocab_file     = BERT_VOCABULARY,)
+            
+            model                   = BertModel.from_pretrained(BERT_MODEL_SAFETENSORS,
+                                                                config           = config,
+                                                                local_files_only = True,)
+            
+            model.eval()
+
+            tokenized_texts         = [tokenizer(text,
+                                                 max_length     = max_seq_length,
+                                                 padding        = "max_length",
+                                                 truncation     = True,
+                                                 return_tensors = "pt",
+                                                )
+                                       for text in self.texts
+                                      ]
+
+            features                = []
+            feature_names_set       = set()
+
+            with torch.no_grad():
+                for tokenized_text in tokenized_texts:
+                    input_ids       = tokenized_text["input_ids"]
+                    attention_mask  = tokenized_text["attention_mask"]
+
+                    outputs         = model(input_ids=input_ids, attention_mask=attention_mask)
+                    cls_embedding   = outputs.last_hidden_state[:, 0, :].squeeze(0)
+                    features.append(cls_embedding.numpy())
+
+                    tokens          = tokenizer.convert_ids_to_tokens(input_ids[0])
+                    feature_names_set.update([token for token in tokens if token not in ["[CLS]", "[SEP]", "[PAD]"]])
+
+            feature_names           = sorted(feature_names_set)
+
+            feature_matrix          = np.array(features, dtype = np.float32)
+
+            print(f"Reducing features to {max_features} dimensions using PCA...")
+
+            pca                     = PCA(n_components = max_features)
+            reduced_feature_matrix  = pca.fit_transform(feature_matrix)
+
+            print(f"Created {max_features} BERT-based features with shape: {reduced_feature_matrix.shape}")
+
+            return model, reduced_feature_matrix, feature_names
+
+        except Exception as e:
+            raise Exception(f"Error in creating BERT-based features: {str(e)}")    
     
-        return wn, wordnet_features
+        
+        
+    # ----- TRANSFORMER FEATURES -----
     
+    def transformer(self, pretrained_model_name: str = "bert-base-uncased", max_seq_length: int = 128) -> tuple:
+        """
+        Generate semantic features using a pre-trained Transformer model and return the transformer and feature matrix.
     
+        Arguments:
+        ----------
+            pretrained_model_name : Name of the pre-trained Transformer model (default: 'bert-base-uncased').
+            max_seq_length        : Maximum sequence length for the Transformer input (default: 128).
+    
+        Returns:
+        --------
+            tuple:
+                - AutoModel       : The loaded pre-trained Transformer model.
+                - np.ndarray      : Document-level feature matrix (each document represented as the CLS token embedding or mean token embeddings).
+        """
+    
+        try:
+            print(f"Creating features using pre-trained Transformer model: {pretrained_model_name}")
+
+            tokenizer                  = AutoTokenizer.from_pretrained(pretrained_model_name)
+            model                      = AutoModel.from_pretrained(pretrained_model_name)
+            
+            model.eval()
+
+            tokenized_texts            = [tokenizer(text,
+                                                    max_length     = max_seq_length,
+                                                    padding        = "max_length",
+                                                    truncation     = True,
+                                                    return_tensors = "pt"
+                                                    ) for text in self.texts]
+
+            features                   = []
+
+            with torch.no_grad():
+                
+                for tokenized_text in tokenized_texts:
+                    input_ids          = tokenized_text["input_ids"]
+                    attention_mask     = tokenized_text["attention_mask"]
+
+                    outputs            = model(input_ids = input_ids, attention_mask = attention_mask)
+
+                    cls_embedding      = outputs.last_hidden_state[:, 0, :]
+                    avg_embedding      = outputs.last_hidden_state.mean(dim = 1)
+                    
+                    document_embedding = cls_embedding.squeeze(0).numpy()
+
+                    features.append(document_embedding)
+
+            feature_matrix             = np.array(features, dtype=np.float32)
+
+            print(f"Created {MAX_FEATURES} Transformer-based features with shape: {feature_matrix.shape}")
+
+            return model, feature_matrix
+
+        except Exception as e:
+            raise Exception(f"Error in creating Transformer-based features: {str(e)}")

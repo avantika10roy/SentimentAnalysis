@@ -123,12 +123,14 @@ w2v_model, w2v_features                 = semantic_Feature_Eng.word2vec_cbow()
 # glove_embeddings, glove_model           = semantic_Feature_Eng.glove(GLOVE_MODEL_PATH)
 # fasttext_model, fasttext_features       = semantic_Feature_Eng.fasttext()
 # wordnet_model, wordnet_features         = semantic_Feature_Eng.wordnet()
+bert_model, bert_features,bert_feature_names  = semantic_Feature_Eng.bert()
 
 
 # CONVERTING THE FEATURES INTO FEATURE MATRIX
 w2v_sparse                              = csr_matrix(w2v_features)
 # glove_sparse                            = csr_matrix(glove_embeddings)
 # fasttext_sparse                         = csr_matrix(fasttext_features)
+bert_sparse                             = csr_matrix(bert_features)
 
 # COMBINING THE SEMANTIC, WORD - LEVEL FEATURES, CONTEXTUAL FEATURES
 combined_features                       = hstack([w2v_sparse, 
