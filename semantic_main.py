@@ -96,180 +96,180 @@ contextuals                             = Contextual_Features(texts           = 
 
 # ----- WORD - LEVEL FEATURES -----
 
-# # count_vectorizer, count_features             = word_level_feature_eng.create_count_bow()
-# freq_vectorizer, freq_features               = word_level_feature_eng.create_frequency_bow()
-# # binary_vectorizer, binary_features           = word_level_feature_eng.create_binary_bow()
-# # tfidf_vectorizer, tfidf_features             = word_level_feature_eng.create_tfidf()
-# std_tfidf_vectorizer, std_tfidf_features     = word_level_feature_eng.create_standardized_tfidf()
-# # bm25_transformer, bm25_features              = word_level_feature_eng.create_bm25()
-# bm25f_transformer, bm25f_features            = word_level_feature_eng.create_bm25f()
-# # bm25l_transformer, bm25l_features            = word_level_feature_eng.create_bm25l()
-# # bm25t_transformer, bm25t_features            = word_level_feature_eng.create_bm25t()
-# bm25_plus_transformer, bm25_plus_features    = word_level_feature_eng.create_bm25_plus()
-# skipgrams_vectorizer, skipgram_features      = word_level_feature_eng.create_skipgrams()
-# pos_ngram_vectorizer, pos_ngram_features     = word_level_feature_eng.create_positional_ngrams()
+# count_vectorizer, count_features             = word_level_feature_eng.create_count_bow()
+freq_vectorizer, freq_features               = word_level_feature_eng.create_frequency_bow()
+# binary_vectorizer, binary_features           = word_level_feature_eng.create_binary_bow()
+# tfidf_vectorizer, tfidf_features             = word_level_feature_eng.create_tfidf()
+std_tfidf_vectorizer, std_tfidf_features     = word_level_feature_eng.create_standardized_tfidf()
+# bm25_transformer, bm25_features              = word_level_feature_eng.create_bm25()
+bm25f_transformer, bm25f_features            = word_level_feature_eng.create_bm25f()
+# bm25l_transformer, bm25l_features            = word_level_feature_eng.create_bm25l()
+# bm25t_transformer, bm25t_features            = word_level_feature_eng.create_bm25t()
+bm25_plus_transformer, bm25_plus_features    = word_level_feature_eng.create_bm25_plus()
+skipgrams_vectorizer, skipgram_features      = word_level_feature_eng.create_skipgrams()
+pos_ngram_vectorizer, pos_ngram_features     = word_level_feature_eng.create_positional_ngrams()
 
-# # ----- CONTEXTUALS FEATURES -----
+# ----- CONTEXTUALS FEATURES -----
 
-# window_vectorizer, window_features           = contextuals.window_based()
-# # position_vectorizer, positional_features     = contextuals.position_based()
-# ngram_vectorizer, trigrams                   = contextuals.generate_ngrams()
-# # cross_doc_vectorizer, tfidf_matrix           = contextuals.cross_document()
+window_vectorizer, window_features           = contextuals.window_based()
+# position_vectorizer, positional_features     = contextuals.position_based()
+ngram_vectorizer, trigrams                   = contextuals.generate_ngrams()
+# cross_doc_vectorizer, tfidf_matrix           = contextuals.cross_document()
 
 
 # ----- SEMANTIC FEATURES -----
 
-# w2v_model, w2v_features                 = semantic_Feature_Eng.word2vec_cbow()
+w2v_model, w2v_features                 = semantic_Feature_Eng.word2vec_cbow()
 # glove_embeddings, glove_model           = semantic_Feature_Eng.glove(GLOVE_MODEL_PATH)
 # fasttext_model, fasttext_features       = semantic_Feature_Eng.fasttext()
 # wordnet_model, wordnet_features         = semantic_Feature_Eng.wordnet()
-bert_model, bert_features               = semantic_Feature_Eng.bert()
+bert_model, bert_features,bert_feature_names  = semantic_Feature_Eng.bert()
 
 
-# # CONVERTING THE FEATURES INTO FEATURE MATRIX
-# w2v_sparse                              = csr_matrix(w2v_features)
-# # glove_sparse                            = csr_matrix(glove_embeddings)
-# # fasttext_sparse                         = csr_matrix(fasttext_features)
+# CONVERTING THE FEATURES INTO FEATURE MATRIX
+w2v_sparse                              = csr_matrix(w2v_features)
+# glove_sparse                            = csr_matrix(glove_embeddings)
+# fasttext_sparse                         = csr_matrix(fasttext_features)
 bert_sparse                             = csr_matrix(bert_features)
 
-# # COMBINING THE SEMANTIC, WORD - LEVEL FEATURES, CONTEXTUAL FEATURES
-# combined_features                       = hstack([w2v_sparse, 
-#                                                   # glove_sparse, 
-#                                                   # fasttext_sparse,
-#                                                   freq_features, 
-#                                                   std_tfidf_features,
-#                                                   bm25f_features,
-#                                                   bm25_plus_features,
-#                                                   skipgram_features,
-#                                                   pos_ngram_features,
-#                                                   window_features,
-#                                                   # positional_features,
-#                                                   trigrams,
-#                                                   # tfidf_matrix 
-#                                                   ])
+# COMBINING THE SEMANTIC, WORD - LEVEL FEATURES, CONTEXTUAL FEATURES
+combined_features                       = hstack([w2v_sparse, 
+                                                  # glove_sparse, 
+                                                  # fasttext_sparse,
+                                                  freq_features, 
+                                                  std_tfidf_features,
+                                                  bm25f_features,
+                                                  bm25_plus_features,
+                                                  skipgram_features,
+                                                  pos_ngram_features,
+                                                  window_features,
+                                                  # positional_features,
+                                                  trigrams,
+                                                  # tfidf_matrix 
+                                                  ])
 
-# print(f"Combined Feature Matrix Shape: {combined_features.shape}")
-
-
-# # ----- EXTRACTING THE FEATURE NAMES -----
-
-# feature_names                            = []
-
-# w2v_feature_names                        = w2v_model.wv.index_to_key[:MAX_FEATURES]
-# # fasttext_feature_names                   = fasttext_model.wv.index_to_key[:MAX_FEATURES]
-
-# # COMBINING THE FEATURE NAMES OF SEMANTIC, WORD-LEVEL, CONTEXTUAL FEATURES
-# feature_names                            = (list(w2v_feature_names) + 
-#                                             # list(fasttext_feature_names) + 
-#                                             list(freq_vectorizer.get_feature_names_out()) +
-#                                             list(std_tfidf_vectorizer.get_feature_names_out()) +
-#                                             list(bm25f_transformer.count_vectorizer.get_feature_names_out()) +
-#                                             list(bm25_plus_transformer.count_vectorizer.get_feature_names_out()) +
-#                                             list(skipgrams_vectorizer.get_feature_names_out()) +
-#                                             list(pos_ngram_vectorizer.get_feature_names_out()) + 
-#                                             list(window_vectorizer.get_feature_names_out()) +
-#                                             # list(position_vectorizer.get_feature_names_out()) +
-#                                             # list(cross_doc_vectorizer.get_feature_names_out())
-#                                             list(ngram_vectorizer.get_feature_names_out())
-#                                            )
-
-# print(f"Number of feature names extracted: {len(feature_names)}")
+print(f"Combined Feature Matrix Shape: {combined_features.shape}")
 
 
-# # ----- SELECTING THE FEATURES -----
+# ----- EXTRACTING THE FEATURE NAMES -----
 
-# # FEATURE SELECTOR
-# feature_selector                         = TextFeatureSelector(X             = combined_features,
-#                                                                y             = imdb_ratings_data['sentiment'].values,
-#                                                                feature_names = feature_names,
-#                                                                n_features    = MAX_FEATURES
-#                                                                )
+feature_names                            = []
 
-# # CHI-SQUARE SELECTION
-# chi_square_features, chi_square_scores   = feature_selector.chi_square_selection()
+w2v_feature_names                        = w2v_model.wv.index_to_key[:MAX_FEATURES]
+# fasttext_feature_names                   = fasttext_model.wv.index_to_key[:MAX_FEATURES]
 
-# # COMBINING THE FEATURES
-# selected_combined_features               = combined_features[:, chi_square_features]
+# COMBINING THE FEATURE NAMES OF SEMANTIC, WORD-LEVEL, CONTEXTUAL FEATURES
+feature_names                            = (list(w2v_feature_names) + 
+                                            # list(fasttext_feature_names) + 
+                                            list(freq_vectorizer.get_feature_names_out()) +
+                                            list(std_tfidf_vectorizer.get_feature_names_out()) +
+                                            list(bm25f_transformer.count_vectorizer.get_feature_names_out()) +
+                                            list(bm25_plus_transformer.count_vectorizer.get_feature_names_out()) +
+                                            list(skipgrams_vectorizer.get_feature_names_out()) +
+                                            list(pos_ngram_vectorizer.get_feature_names_out()) + 
+                                            list(window_vectorizer.get_feature_names_out()) +
+                                            # list(position_vectorizer.get_feature_names_out()) +
+                                            # list(cross_doc_vectorizer.get_feature_names_out())
+                                            list(ngram_vectorizer.get_feature_names_out())
+                                           )
 
-
-# # VECTORIZERS TUPLE
-# vectorizers_tuple                        = (w2v_model,
-#                                             # fasttext_model,
-#                                             freq_vectorizer,
-#                                             std_tfidf_vectorizer, 
-#                                             bm25f_transformer,
-#                                             bm25_plus_features, 
-#                                             skipgrams_vectorizer, 
-#                                             pos_ngram_vectorizer,
-#                                             window_vectorizer,
-#                                             # position_vectorizer,
-#                                             ngram_vectorizer,
-#                                             # cross_doc_vectorizer
-#                                             )
-
-# # ----- SENTIMENTAL ANALYSIS -----
-
-# sentiment_analyzer                       = SentimentAnalyzer(X                        = selected_combined_features, 
-#                                                              y                        = imdb_ratings_data["sentiment"].values,
-#                                                              feature_eng              = semantic_Feature_Eng,
-#                                                              vectorizers              = vectorizers_tuple,
-#                                                              selected_feature_indices = chi_square_features
-#                                                              )
+print(f"Number of feature names extracted: {len(feature_names)}")
 
 
-# # ----- MODEL FITTING ON TRAINING DATA -----
+# ----- SELECTING THE FEATURES -----
+
+# FEATURE SELECTOR
+feature_selector                         = TextFeatureSelector(X             = combined_features,
+                                                               y             = imdb_ratings_data['sentiment'].values,
+                                                               feature_names = feature_names,
+                                                               n_features    = MAX_FEATURES
+                                                               )
+
+# CHI-SQUARE SELECTION
+chi_square_features, chi_square_scores   = feature_selector.chi_square_selection()
+
+# COMBINING THE FEATURES
+selected_combined_features               = combined_features[:, chi_square_features]
 
 
-# # TRAIN THE MODEL
-# trained_model                             = sentiment_analyzer.train_model(model_type = MODEL_NAME, kernel = KERNEL_NAME)
+# VECTORIZERS TUPLE
+vectorizers_tuple                        = (w2v_model,
+                                            # fasttext_model,
+                                            freq_vectorizer,
+                                            std_tfidf_vectorizer, 
+                                            bm25f_transformer,
+                                            bm25_plus_features, 
+                                            skipgrams_vectorizer, 
+                                            pos_ngram_vectorizer,
+                                            window_vectorizer,
+                                            # position_vectorizer,
+                                            ngram_vectorizer,
+                                            # cross_doc_vectorizer
+                                            )
 
-# # EVALUATING THE RESULTS OF THE MODEL
-# evaluation_results                        = sentiment_analyzer.evaluate_model(trained_model)
+# ----- SENTIMENTAL ANALYSIS -----
 
-
-# # ----- TRANSFORMING THE VECTORIZERS -----
-
-# test_data                                 = load_csv_data(filepath = TEST_DATA_PATH)
-
-# # TRANSFORMING THE VECTORS USING PRETRAINED MODEL OF WORD2VEC AND FASTTEXT
-# w2v_features_transformed                  = vector_transform(list(test_data['Text']), w2v_model)
-# # fasttext_features_transformed             = vector_transform(list(test_data['Text']), fasttext_model)
-
-# # COMBINING THE FEATURES
-# combined_features_transformed             = np.hstack([w2v_features_transformed])
-
-# # CONVERTING TO SPARSE MATRIX
-# combined_features_sparse                  = csr_matrix(combined_features_transformed)
-
-
-# # # ----- PREDICT THE TRAINED MODEL USING UNSEEN DATA USING SEMANTIC, WORD-LEVEL, CONTEXTUAL FEATURES -----
-
-# model_predictions, unseen_accuracy        = sentiment_analyzer.test_on_unseen_data(model               = trained_model, 
-#                                                                                    unseen_texts        = list(test_data['Text']),
-#                                                                                    unseen_labels       = list(test_data['Sentiment']),
-#                                                                                    combined_features   = combined_features_sparse,
-#                                                                                    freq_features       = freq_vectorizer.transform(test_data['Text']),
-#                                                                                    std_tfidf_features  = std_tfidf_vectorizer.transform(test_data['Text']),
-#                                                                                    bm25f_features      = bm25f_transformer.transform(test_data['Text']),
-#                                                                                    bm25_plus_features  = bm25_plus_transformer.transform(test_data['Text']),
-#                                                                                    skipgram_features   = skipgrams_vectorizer.transform(test_data['Text']),
-#                                                                                    pos_ngram_features  = pos_ngram_vectorizer.transform(test_data['Text']),
-#                                                                                    window_features     = window_vectorizer.transform(test_data['Text']),
-#                                                                                    # positional_features = position_vectorizer.transform(test_data['Text']),
-#                                                                                    ngram_features      = ngram_vectorizer.transform(test_data['Text']),
-#                                                                                    # cross_doc_features  = cross_doc_vectorizer.transform(test_data['Text']) 
-#                                                                                    )
+sentiment_analyzer                       = SentimentAnalyzer(X                        = selected_combined_features, 
+                                                             y                        = imdb_ratings_data["sentiment"].values,
+                                                             feature_eng              = semantic_Feature_Eng,
+                                                             vectorizers              = vectorizers_tuple,
+                                                             selected_feature_indices = chi_square_features
+                                                             )
 
 
-# all_test_data                              = {'texts'            : list(test_data['Text']), 
-#                                               'true_labels'      : list(test_data['Sentiment']), 
-#                                               'predicted_labels' : list(model_predictions)
-#                                               }
+# ----- MODEL FITTING ON TRAINING DATA -----
 
-# model_prediction_df                        = pd.DataFrame.from_dict(data   = all_test_data, 
-#                                                                     orient = 'index').T
 
-# model_prediction_df.to_csv(path_or_buf     = SAVE_PATH_VARIABLE,
-#                            index           = False)
+# TRAIN THE MODEL
+trained_model                             = sentiment_analyzer.train_model(model_type = MODEL_NAME, kernel = KERNEL_NAME)
 
-# print (f"Sentiment Analysis result by {MODEL_NAME} Model of Max Features {MAX_FEATURES} has been saved to : {SAVE_PATH_VARIABLE}")
+# EVALUATING THE RESULTS OF THE MODEL
+evaluation_results                        = sentiment_analyzer.evaluate_model(trained_model)
+
+
+# ----- TRANSFORMING THE VECTORIZERS -----
+
+test_data                                 = load_csv_data(filepath = TEST_DATA_PATH)
+
+# TRANSFORMING THE VECTORS USING PRETRAINED MODEL OF WORD2VEC AND FASTTEXT
+w2v_features_transformed                  = vector_transform(list(test_data['Text']), w2v_model)
+# fasttext_features_transformed             = vector_transform(list(test_data['Text']), fasttext_model)
+
+# COMBINING THE FEATURES
+combined_features_transformed             = np.hstack([w2v_features_transformed])
+
+# CONVERTING TO SPARSE MATRIX
+combined_features_sparse                  = csr_matrix(combined_features_transformed)
+
+
+# # ----- PREDICT THE TRAINED MODEL USING UNSEEN DATA USING SEMANTIC, WORD-LEVEL, CONTEXTUAL FEATURES -----
+
+model_predictions, unseen_accuracy        = sentiment_analyzer.test_on_unseen_data(model               = trained_model, 
+                                                                                   unseen_texts        = list(test_data['Text']),
+                                                                                   unseen_labels       = list(test_data['Sentiment']),
+                                                                                   combined_features   = combined_features_sparse,
+                                                                                   freq_features       = freq_vectorizer.transform(test_data['Text']),
+                                                                                   std_tfidf_features  = std_tfidf_vectorizer.transform(test_data['Text']),
+                                                                                   bm25f_features      = bm25f_transformer.transform(test_data['Text']),
+                                                                                   bm25_plus_features  = bm25_plus_transformer.transform(test_data['Text']),
+                                                                                   skipgram_features   = skipgrams_vectorizer.transform(test_data['Text']),
+                                                                                   pos_ngram_features  = pos_ngram_vectorizer.transform(test_data['Text']),
+                                                                                   window_features     = window_vectorizer.transform(test_data['Text']),
+                                                                                   # positional_features = position_vectorizer.transform(test_data['Text']),
+                                                                                   ngram_features      = ngram_vectorizer.transform(test_data['Text']),
+                                                                                   # cross_doc_features  = cross_doc_vectorizer.transform(test_data['Text']) 
+                                                                                   )
+
+
+all_test_data                              = {'texts'            : list(test_data['Text']), 
+                                              'true_labels'      : list(test_data['Sentiment']), 
+                                              'predicted_labels' : list(model_predictions)
+                                              }
+
+model_prediction_df                        = pd.DataFrame.from_dict(data   = all_test_data, 
+                                                                    orient = 'index').T
+
+model_prediction_df.to_csv(path_or_buf     = SAVE_PATH_VARIABLE,
+                           index           = False)
+
+print (f"Sentiment Analysis result by {MODEL_NAME} Model of Max Features {MAX_FEATURES} has been saved to : {SAVE_PATH_VARIABLE}")

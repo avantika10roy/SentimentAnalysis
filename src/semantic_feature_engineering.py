@@ -395,74 +395,81 @@ class Semantic_Feature_Engineering:
     # ----- BERT LEVEL FEATURES -----
     
     def bert(self, max_seq_length: int = 128, max_features: int = None) -> tuple:
-        
-        """
-        Generate semantic features using a pre-trained BERT model and return the transformer and feature matrix.
     
+        """
+        Generate semantic features using a pre-trained BERT model and return the transformer, feature matrix, and feature names.
+
         Arguments:
         ----------
-            max_seq_length        : Maximum sequence length for BERT input (default: 128)
-            max_features          : Number of features to reduce the embeddings to (default: None, uses MAX_FEATURES).
-    
+            max_seq_length : Maximum sequence length for BERT input (default: 128)
+            max_features   : Number of features to reduce the embeddings to (default: None, uses MAX_FEATURES).
+
         Returns:
         --------
             tuple:
                 - BertModel       : The loaded pre-trained BERT model.
                 - np.ndarray      : Document-level feature matrix (each document represented as the CLS token embedding).
+                - list            : List of extracted feature names (unique tokens).
         """
         
         try:
-            if self.max_features is None:
-                self.max_features   = MAX_FEATURES
-            
+            if max_features is None:
+                max_features        = MAX_FEATURES
+
             print(f"Creating BERT-based features using pre-trained model")
 
             config                  = PretrainedConfig.from_json_file(BERT_CONFIG)
             
             tokenizer               = BertTokenizer.from_pretrained(BERT_TOKENIZER_CONFIG,
                                                                     tokenizer_file = BERT_TOKENIZER,
-                                                                    vocab_file     = BERT_VOCABULARY
-                                                                    )
+                                                                    vocab_file     = BERT_VOCABULARY,)
             
             model                   = BertModel.from_pretrained(BERT_MODEL_SAFETENSORS,
                                                                 config           = config,
-                                                                local_files_only = True
-                                                                )
+                                                                local_files_only = True,)
             
             model.eval()
-        
+
             tokenized_texts         = [tokenizer(text,
                                                  max_length     = max_seq_length,
                                                  padding        = "max_length",
                                                  truncation     = True,
-                                                 return_tensors = "pt"
-                                                 ) for text in self.texts]
-        
+                                                 return_tensors = "pt",
+                                                )
+                                       for text in self.texts
+                                      ]
+
             features                = []
+            feature_names_set       = set()
 
             with torch.no_grad():
                 for tokenized_text in tokenized_texts:
                     input_ids       = tokenized_text["input_ids"]
                     attention_mask  = tokenized_text["attention_mask"]
-                
-                    outputs         = model(input_ids = input_ids, attention_mask = attention_mask)
-                
+
+                    outputs         = model(input_ids=input_ids, attention_mask=attention_mask)
                     cls_embedding   = outputs.last_hidden_state[:, 0, :].squeeze(0)
                     features.append(cls_embedding.numpy())
-        
+
+                    tokens          = tokenizer.convert_ids_to_tokens(input_ids[0])
+                    feature_names_set.update([token for token in tokens if token not in ["[CLS]", "[SEP]", "[PAD]"]])
+
+            feature_names           = sorted(feature_names_set)
+
             feature_matrix          = np.array(features, dtype = np.float32)
-            
-            print(f"Reducing features to {self.max_features} dimensions using PCA...")
-            
-            pca                     = PCA(n_components = self.max_features)
+
+            print(f"Reducing features to {max_features} dimensions using PCA...")
+
+            pca                     = PCA(n_components = max_features)
             reduced_feature_matrix  = pca.fit_transform(feature_matrix)
 
-            print(f"Created {MAX_FEATURES} BERT-based features with shape: {reduced_feature_matrix.shape}")
+            print(f"Created {max_features} BERT-based features with shape: {reduced_feature_matrix.shape}")
 
-            return model, reduced_feature_matrix
+            return model, reduced_feature_matrix, feature_names
 
         except Exception as e:
-            raise Exception(f"Error in creating BERT-based features: {str(e)}")
+            raise Exception(f"Error in creating BERT-based features: {str(e)}")    
+    
         
         
     # ----- TRANSFORMER FEATURES -----
