@@ -430,7 +430,7 @@ Classes: Positive (pos) and Negative (neg) reviews.
 
 
 #### Gaussian Naive Bayes
-- **Accuracy**: 0.8243
+- **Accuracy**: 82.43%
 
 - **Confusion Matrix**:
 
@@ -453,7 +453,7 @@ Classes: Positive (pos) and Negative (neg) reviews.
 
 
 #### Multilayer Perceptron
-- **Accuracy**: 0.8735
+- **Accuracy**: 87.35%
 
 - **Confusion Matrix**:
 
@@ -472,7 +472,7 @@ Classes: Positive (pos) and Negative (neg) reviews.
 | Macro Avg    | 0.87      | 0.87   | 0.87     | 4000    |
 | Weighted Avg | 0.87      | 0.87   | 0.87     | 4000    |
 
-- **Accuracy on Unseen Data** : 0.8163
+- **Accuracy on Unseen Data** : 81.63%
 
 
 #### Adaptive Boosting (Adaboost)
