@@ -8,17 +8,17 @@ import numpy as np
 
 import tensorflow_hub as hub
 
-from sklearn.decomposition import PCA
+from sklearn.decomposition import TruncatedSVD
 
 from gensim.models import Word2Vec
 from gensim.models import FastText
 from nltk.corpus import wordnet as wn
 
-from transformers import AutoModel
 from transformers import BertModel
-from transformers import AutoTokenizer
 from transformers import BertTokenizer
+from transformers import DistilBertModel
 from transformers import PretrainedConfig
+from transformers import DistilBertTokenizer
 
 from config import MAX_FEATURES
 from config import BERT_CONFIG
@@ -26,6 +26,13 @@ from config import BERT_TOKENIZER
 from config import BERT_VOCABULARY
 from config import BERT_TOKENIZER_CONFIG
 from config import BERT_MODEL_SAFETENSORS
+
+from config import DISTILBERT_CONFIG
+from config import DISTILBERT_MODEL_SAFETENSORS
+from config import DISTILBERT_PYTORCH_BIN
+from config import DISTILBERT_TOKENIZER
+from config import DISTILBERT_TOKENIZER_CONFIG
+from config import DISTILBERT_VOCABULARY
 
 
 # ----- SEMANTIC FEATURE ENGINEERING -----
@@ -393,51 +400,135 @@ class Semantic_Feature_Engineering:
             raise Exception(f"Error in creating WordNet-based features: {str(e)}")
     
     # ----- BERT LEVEL FEATURES -----
-    
+
     def bert(self, max_seq_length: int = 128, max_features: int = None) -> tuple:
-    
         """
         Generate semantic features using a pre-trained BERT model and return the transformer, feature matrix, and feature names.
 
         Arguments:
         ----------
-            max_seq_length : Maximum sequence length for BERT input (default: 128)
+            max_seq_length     : Maximum sequence length for BERT input (default: 128)
+            max_features       : Number of features to reduce the embeddings and feature names to (default: None, uses MAX_FEATURES).
+
+        Returns:
+        --------
+            tuple:
+                - BertModel    : The loaded pre-trained BERT model.
+                - np.ndarray   : Document-level feature matrix (each document represented as the CLS token embedding).
+                - list         : List of reduced feature names (length equal to max_features).
+        """
+        
+        try:
+            if max_features is None:
+                max_features = MAX_FEATURES
+
+            print(f"Creating BERT-based features using pre-trained model")
+
+            config                 = PretrainedConfig.from_json_file(BERT_CONFIG)
+            
+            tokenizer              = BertTokenizer.from_pretrained(BERT_TOKENIZER_CONFIG,
+                                                                   tokenizer_file = BERT_TOKENIZER,
+                                                                   vocab_file     = BERT_VOCABULARY,)
+            
+            model                  = BertModel.from_pretrained(BERT_MODEL_SAFETENSORS,
+                                                               config           = config,
+                                                               local_files_only = True,)
+            
+            model.eval()
+
+            tokenized_texts        = [tokenizer
+                                      (
+                                          text,
+                                          max_length     = max_seq_length,
+                                          padding        = "max_length",
+                                          truncation     = True,
+                                          return_tensors = "pt",
+                                          )
+                                      for text in self.texts
+                                      ]
+
+            features               = []
+            feature_names_set      = set()
+
+            with torch.no_grad():
+                for tokenized_text in tokenized_texts:
+                    input_ids      = tokenized_text["input_ids"]
+                    attention_mask = tokenized_text["attention_mask"]
+
+                    outputs        = model(input_ids      = input_ids,
+                                           attention_mask = attention_mask)
+                    
+                    cls_embedding  = outputs.last_hidden_state[:, 0, :].squeeze(0)
+                    features.append(cls_embedding.numpy())
+
+                tokens             = tokenizer.convert_ids_to_tokens(input_ids[0])
+                feature_names_set.update([token for token in tokens if token not in ["[CLS]", "[SEP]", "[PAD]"]])
+
+            feature_names          = sorted(feature_names_set)
+            print(f"Original number of tokens: {len(feature_names)}")
+
+            if len(feature_names) > max_features:
+                feature_names      = feature_names[:max_features]
+
+            feature_matrix         = np.array(features, dtype=np.float32)
+
+            print(f"Reducing features to {max_features} dimensions using SVD...")
+            svd                    = TruncatedSVD(n_components = max_features)
+            reduced_feature_matrix = svd.fit_transform(feature_matrix)
+
+            print(f"Created {max_features} BERT-based features with shape: {reduced_feature_matrix.shape}")
+            return model, tokenizer, reduced_feature_matrix, feature_names
+
+        except Exception as e:
+            raise Exception(f"Error in creating BERT-based features: {str(e)}")
+        
+        
+    
+    # ----- DISTILBERT LEVEL FEATURES -----
+
+    def distilbert(self, max_seq_length: int = 128, max_features: int = None) -> tuple:
+        """
+        Generate semantic features using a pre-trained DistilBERT model and return the transformer, feature matrix, and feature names.
+
+        Arguments:
+        ----------
+            max_seq_length : Maximum sequence length for DistilBERT input (default: 128).
             max_features   : Number of features to reduce the embeddings to (default: None, uses MAX_FEATURES).
 
         Returns:
         --------
             tuple:
-                - BertModel       : The loaded pre-trained BERT model.
+                - DistilBertModel : The loaded pre-trained DistilBERT model.
                 - np.ndarray      : Document-level feature matrix (each document represented as the CLS token embedding).
                 - list            : List of extracted feature names (unique tokens).
         """
-        
+
         try:
             if max_features is None:
-                max_features        = MAX_FEATURES
+                max_features = MAX_FEATURES
 
-            print(f"Creating BERT-based features using pre-trained model")
+            print("Creating DistilBERT-based features using pre-trained model")
 
-            config                  = PretrainedConfig.from_json_file(BERT_CONFIG)
-            
-            tokenizer               = BertTokenizer.from_pretrained(BERT_TOKENIZER_CONFIG,
-                                                                    tokenizer_file = BERT_TOKENIZER,
-                                                                    vocab_file     = BERT_VOCABULARY,)
-            
-            model                   = BertModel.from_pretrained(BERT_MODEL_SAFETENSORS,
-                                                                config           = config,
-                                                                local_files_only = True,)
-            
+            config                  = PretrainedConfig.from_json_file(DISTILBERT_CONFIG)
+        
+            tokenizer               = DistilBertTokenizer.from_pretrained(DISTILBERT_TOKENIZER_CONFIG,
+                                                                          tokenizer_file = DISTILBERT_TOKENIZER,
+                                                                          vocab_file     = DISTILBERT_VOCABULARY,)
+        
+            model                   = DistilBertModel.from_pretrained(DISTILBERT_MODEL_SAFETENSORS,
+                                                                      config           = config,
+                                                                      local_files_only = True,)
+
             model.eval()
 
             tokenized_texts         = [tokenizer(text,
-                                                 max_length     = max_seq_length,
-                                                 padding        = "max_length",
-                                                 truncation     = True,
-                                                 return_tensors = "pt",
-                                                )
+                                                 max_length      = max_seq_length,
+                                                 padding         = "max_length",
+                                                 truncation      = True,
+                                                 return_tensors  = "pt",
+                                                 )
                                        for text in self.texts
-                                      ]
+                                       ]
 
             features                = []
             feature_names_set       = set()
@@ -447,7 +538,9 @@ class Semantic_Feature_Engineering:
                     input_ids       = tokenized_text["input_ids"]
                     attention_mask  = tokenized_text["attention_mask"]
 
-                    outputs         = model(input_ids=input_ids, attention_mask=attention_mask)
+                    outputs         = model(input_ids      = input_ids, 
+                                            attention_mask = attention_mask)
+                    
                     cls_embedding   = outputs.last_hidden_state[:, 0, :].squeeze(0)
                     features.append(cls_embedding.numpy())
 
@@ -456,77 +549,16 @@ class Semantic_Feature_Engineering:
 
             feature_names           = sorted(feature_names_set)
 
-            feature_matrix          = np.array(features, dtype = np.float32)
+            feature_matrix          = np.array(features, dtype=np.float32)
 
-            print(f"Reducing features to {max_features} dimensions using PCA...")
+            print(f"Reducing features to {max_features} dimensions using SVD...")
 
-            pca                     = PCA(n_components = max_features)
-            reduced_feature_matrix  = pca.fit_transform(feature_matrix)
+            svd                     = TruncatedSVD(n_components = max_features)
+            reduced_feature_matrix  = svd.fit_transform(feature_matrix)
 
-            print(f"Created {max_features} BERT-based features with shape: {reduced_feature_matrix.shape}")
+            print(f"Created {max_features} DistilBERT-based features with shape: {reduced_feature_matrix.shape}")
 
-            return model, reduced_feature_matrix, feature_names
-
-        except Exception as e:
-            raise Exception(f"Error in creating BERT-based features: {str(e)}")    
-    
-        
-        
-    # ----- TRANSFORMER FEATURES -----
-    
-    def transformer(self, pretrained_model_name: str = "bert-base-uncased", max_seq_length: int = 128) -> tuple:
-        """
-        Generate semantic features using a pre-trained Transformer model and return the transformer and feature matrix.
-    
-        Arguments:
-        ----------
-            pretrained_model_name : Name of the pre-trained Transformer model (default: 'bert-base-uncased').
-            max_seq_length        : Maximum sequence length for the Transformer input (default: 128).
-    
-        Returns:
-        --------
-            tuple:
-                - AutoModel       : The loaded pre-trained Transformer model.
-                - np.ndarray      : Document-level feature matrix (each document represented as the CLS token embedding or mean token embeddings).
-        """
-    
-        try:
-            print(f"Creating features using pre-trained Transformer model: {pretrained_model_name}")
-
-            tokenizer                  = AutoTokenizer.from_pretrained(pretrained_model_name)
-            model                      = AutoModel.from_pretrained(pretrained_model_name)
-            
-            model.eval()
-
-            tokenized_texts            = [tokenizer(text,
-                                                    max_length     = max_seq_length,
-                                                    padding        = "max_length",
-                                                    truncation     = True,
-                                                    return_tensors = "pt"
-                                                    ) for text in self.texts]
-
-            features                   = []
-
-            with torch.no_grad():
-                
-                for tokenized_text in tokenized_texts:
-                    input_ids          = tokenized_text["input_ids"]
-                    attention_mask     = tokenized_text["attention_mask"]
-
-                    outputs            = model(input_ids = input_ids, attention_mask = attention_mask)
-
-                    cls_embedding      = outputs.last_hidden_state[:, 0, :]
-                    avg_embedding      = outputs.last_hidden_state.mean(dim = 1)
-                    
-                    document_embedding = cls_embedding.squeeze(0).numpy()
-
-                    features.append(document_embedding)
-
-            feature_matrix             = np.array(features, dtype=np.float32)
-
-            print(f"Created {MAX_FEATURES} Transformer-based features with shape: {feature_matrix.shape}")
-
-            return model, feature_matrix
+            return model, tokenizer, reduced_feature_matrix, feature_names
 
         except Exception as e:
-            raise Exception(f"Error in creating Transformer-based features: {str(e)}")
+            raise Exception(f"Error in creating DistilBERT-based features: {str(e)}")
