@@ -17,6 +17,12 @@ BERT_MODEL_SAFETENSORS                                          = "models/BERT/m
 BERT_TOKENIZER_CONFIG                                           = "models/BERT/tokenizer_config.json"
 BERT_TOKENIZER                                                  = "models/BERT/tokenizer.json"
 BERT_VOCABULARY                                                 = "models/BERT/vocab.txt"
+DISTILBERT_CONFIG                                               = "models/DISTILBERT/config.json"
+DISTILBERT_MODEL_SAFETENSORS                                    = "models/DISTILBERT/model.safetensors"
+DISTILBERT_TOKENIZER_CONFIG                                     = "models/DISTILBERT/tokenizer_config.json"
+DISTILBERT_TOKENIZER                                            = "models/DISTILBERT/tokenizer.json"
+DISTILBERT_VOCABULARY                                           = "models/DISTILBERT/vocab.txt"
+DISTILBERT_PYTORCH_BIN                                          = "models/DISTILBERT/pytorch_model.bin"
 
 
 # PARAMETER DICTIONARY

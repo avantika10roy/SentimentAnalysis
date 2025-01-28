@@ -111,9 +111,9 @@ pos_ngram_vectorizer, pos_ngram_features     = word_level_feature_eng.create_pos
 
 # ----- CONTEXTUALS FEATURES -----
 
-window_vectorizer, window_features           = contextuals.window_based()
+# window_vectorizer, window_features           = contextuals.window_based()
 # position_vectorizer, positional_features     = contextuals.position_based()
-ngram_vectorizer, trigrams                   = contextuals.generate_ngrams()
+# ngram_vectorizer, trigrams                   = contextuals.generate_ngrams()
 # cross_doc_vectorizer, tfidf_matrix           = contextuals.cross_document()
 
 
@@ -123,7 +123,8 @@ w2v_model, w2v_features                 = semantic_Feature_Eng.word2vec_cbow()
 # glove_embeddings, glove_model           = semantic_Feature_Eng.glove(GLOVE_MODEL_PATH)
 # fasttext_model, fasttext_features       = semantic_Feature_Eng.fasttext()
 # wordnet_model, wordnet_features         = semantic_Feature_Eng.wordnet()
-bert_model, bert_features,bert_feature_names  = semantic_Feature_Eng.bert()
+bert_model, bert_tokenizer, bert_features,bert_feature_names                          = semantic_Feature_Eng.bert()
+distilbert_model, distilbert_tokenizer, distilbert_features, distilbert_feature_names = semantic_Feature_Eng.distilbert()
 
 
 # CONVERTING THE FEATURES INTO FEATURE MATRIX
@@ -131,6 +132,7 @@ w2v_sparse                              = csr_matrix(w2v_features)
 # glove_sparse                            = csr_matrix(glove_embeddings)
 # fasttext_sparse                         = csr_matrix(fasttext_features)
 bert_sparse                             = csr_matrix(bert_features)
+distilbert_sparse                       = csr_matrix(distilbert_features) 
 
 # COMBINING THE SEMANTIC, WORD - LEVEL FEATURES, CONTEXTUAL FEATURES
 combined_features                       = hstack([w2v_sparse, 
@@ -142,9 +144,9 @@ combined_features                       = hstack([w2v_sparse,
                                                   bm25_plus_features,
                                                   skipgram_features,
                                                   pos_ngram_features,
-                                                  window_features,
+                                                  # window_features,
                                                   # positional_features,
-                                                  trigrams,
+                                                  # trigrams,
                                                   # tfidf_matrix 
                                                   ])
 
@@ -166,11 +168,7 @@ feature_names                            = (list(w2v_feature_names) +
                                             list(bm25f_transformer.count_vectorizer.get_feature_names_out()) +
                                             list(bm25_plus_transformer.count_vectorizer.get_feature_names_out()) +
                                             list(skipgrams_vectorizer.get_feature_names_out()) +
-                                            list(pos_ngram_vectorizer.get_feature_names_out()) + 
-                                            list(window_vectorizer.get_feature_names_out()) +
-                                            # list(position_vectorizer.get_feature_names_out()) +
-                                            # list(cross_doc_vectorizer.get_feature_names_out())
-                                            list(ngram_vectorizer.get_feature_names_out())
+                                            list(pos_ngram_vectorizer.get_feature_names_out()) 
                                            )
 
 print(f"Number of feature names extracted: {len(feature_names)}")
@@ -201,9 +199,9 @@ vectorizers_tuple                        = (w2v_model,
                                             bm25_plus_features, 
                                             skipgrams_vectorizer, 
                                             pos_ngram_vectorizer,
-                                            window_vectorizer,
+                                            # window_vectorizer,
                                             # position_vectorizer,
-                                            ngram_vectorizer,
+                                            # ngram_vectorizer,
                                             # cross_doc_vectorizer
                                             )
 
@@ -232,8 +230,12 @@ evaluation_results                        = sentiment_analyzer.evaluate_model(tr
 test_data                                 = load_csv_data(filepath = TEST_DATA_PATH)
 
 # TRANSFORMING THE VECTORS USING PRETRAINED MODEL OF WORD2VEC AND FASTTEXT
-w2v_features_transformed                  = vector_transform(list(test_data['Text']), w2v_model)
+# w2v_features_transformed                  = vector_transform(list(test_data['Text']), w2v_model)
+w2v_features_transformed                  = vector_transform(list(test_data['Text']), w2v_model, model_type = "word2vec")
 # fasttext_features_transformed             = vector_transform(list(test_data['Text']), fasttext_model)
+# fasttext_features_transformed             = vector_transform(list(test_data['Text']), fasttext_model, model_type = "fasttext")
+bert_features_transformed                 = vector_transform(list(test_data['Text']), bert_model, bert_tokenizer, model_type = "bert")
+distilbert_features_transformed           = vector_transform(list(test_data['Text']), distilbert_model, distilbert_tokenizer, model_type = "distilbert")
 
 # COMBINING THE FEATURES
 combined_features_transformed             = np.hstack([w2v_features_transformed])
@@ -254,9 +256,9 @@ model_predictions, unseen_accuracy        = sentiment_analyzer.test_on_unseen_da
                                                                                    bm25_plus_features  = bm25_plus_transformer.transform(test_data['Text']),
                                                                                    skipgram_features   = skipgrams_vectorizer.transform(test_data['Text']),
                                                                                    pos_ngram_features  = pos_ngram_vectorizer.transform(test_data['Text']),
-                                                                                   window_features     = window_vectorizer.transform(test_data['Text']),
+                                                                                   # window_features     = window_vectorizer.transform(test_data['Text']),
                                                                                    # positional_features = position_vectorizer.transform(test_data['Text']),
-                                                                                   ngram_features      = ngram_vectorizer.transform(test_data['Text']),
+                                                                                   # ngram_features      = ngram_vectorizer.transform(test_data['Text']),
                                                                                    # cross_doc_features  = cross_doc_vectorizer.transform(test_data['Text']) 
                                                                                    )
 
