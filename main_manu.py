@@ -1,5 +1,3 @@
-# -- Done By Manu Bhaskar --
-
 # -- Dependencies --
 import os
 from tqdm import tqdm
