@@ -1,5 +1,3 @@
-# -- Done By Manu Bhaskar --
-
 # -- Dependencies -- 
 from sklearn.svm import SVC
 from lightgbm import LGBMClassifier
