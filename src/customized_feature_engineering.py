@@ -1,5 +1,3 @@
-# -- Done By Manu Bhaskar --
-
 # -- Dependencies -- 
 import numpy as np
 from gensim.models import KeyedVectors
