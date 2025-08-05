@@ -1,5 +1,3 @@
-# DONE BY AVANTIKA ROY
-
 # Dependencies
 import nltk
 import warnings
