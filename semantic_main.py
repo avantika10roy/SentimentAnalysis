@@ -1,6 +1,3 @@
-## ----- DONE BY PRIYAM PAL -----
-
-
 # DEPENDENCIES
 
 import numpy as np
